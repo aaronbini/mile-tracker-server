@@ -1,0 +1,36 @@
+{
+  "name": "mile-tracker-server",
+  "version": "1.0.0",
+  "description": "App to track miles traveled by EE employees",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "eslint **/*.js",
+    "test": "MONGODB_URI=mongodb://localhost/bpTracker-test mocha",
+    "test:unit:watch": "mocha -w",
+    "test:e2e:watch": "nodemon --exec 'npm run test:e2e'",
+    "test:watch": "npm run test:unit:watch && npm run test:e2e:watch",
+    "start": "nodemon index.js"
+  },
+  "author": "Aaron Bini",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.1",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "jsonwebtoken": "^7.1.9",
+    "moment": "^2.15.1",
+    "mongoose": "^4.6.3",
+    "request": "^2.78.0",
+    "request-promise-native": "^1.0.3"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "eslint": "^3.7.1",
+    "mocha": "^3.1.0",
+    "morgan": "^1.7.0"
+  },
+  "engines": {
+    "node": "6.3.0"
+  }
+}
