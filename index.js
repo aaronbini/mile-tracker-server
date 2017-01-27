@@ -1,5 +1,5 @@
 'use strict';
-
+require('dotenv').load();
 const app = require('./lib/app');
 require('./lib/mongoose-setup');
 const http = require('http');
