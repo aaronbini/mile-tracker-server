@@ -1,0 +1,30 @@
+{
+  "name": "ee-mile-tracker",
+  "scripts": {
+  },
+  "env": {
+    "API_URL": {
+      "required": true
+    },
+    "APP_SECRET": {
+      "required": true
+    },
+    "MAPS_KEY": {
+      "required": true
+    },
+    "AERO_API": {
+      "required": true
+    },
+    "MONGODB_URI": {
+      "required": true
+    }
+  },
+  "formation": {
+  },
+  "addons": [
+    "mongolab"
+  ],
+  "buildpacks": [
+
+  ]
+}
