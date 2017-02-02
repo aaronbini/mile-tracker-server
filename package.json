@@ -9,7 +9,7 @@
     "test:unit:watch": "mocha -w",
     "test:e2e:watch": "nodemon --exec 'npm run test:e2e'",
     "test:watch": "npm run test:unit:watch && npm run test:e2e:watch",
-    "start": "nodemon index.js"
+    "start": "node index.js"
   },
   "author": "Aaron Bini",
   "license": "ISC",
