@@ -71,7 +71,6 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	_app2.default.constant('apiUrl', process.env.API_URL);
-	// app.constant('apiUrl', 'http://localhost:3000/api');
 	
 	_app2.default.config(_http2.default);
 	_app2.default.config(_routes2.default);
