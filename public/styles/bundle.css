@@ -23952,6 +23952,9 @@ md-radio-button {
   md-radio-button .md-label {
     margin-left: 25px; }
 
+md-sidenav {
+  min-width: 420px; }
+
 md-checkbox span {
   font-size: 1.25 em; }
 

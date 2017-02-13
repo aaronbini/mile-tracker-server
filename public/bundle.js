@@ -44,13 +44,13 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	'use strict';
 	
-	var _angular = __webpack_require__(2);
+	var _angular = __webpack_require__(1);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _app = __webpack_require__(4);
+	var _app = __webpack_require__(3);
 	
 	var _app2 = _interopRequireDefault(_app);
 	
@@ -70,211 +70,24 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	_app2.default.constant('apiUrl', process.env.API_URL || '/api');
+	_app2.default.constant('apiUrl', '/api');
 	
 	_app2.default.config(_http2.default);
 	_app2.default.config(_routes2.default);
 	_app2.default.run(_auth2.default);
 	
 	_angular2.default.bootstrap(document, [_app2.default.name]);
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	// shim for using process in browser
-	var process = module.exports = {};
-	
-	// cached from whatever global is present so that test runners that stub it
-	// don't break things.  But we need to wrap it in a try catch in case it is
-	// wrapped in strict mode code which doesn't define any globals.  It's inside a
-	// function because try/catches deoptimize in certain engines.
-	
-	var cachedSetTimeout;
-	var cachedClearTimeout;
-	
-	function defaultSetTimout() {
-	    throw new Error('setTimeout has not been defined');
-	}
-	function defaultClearTimeout () {
-	    throw new Error('clearTimeout has not been defined');
-	}
-	(function () {
-	    try {
-	        if (typeof setTimeout === 'function') {
-	            cachedSetTimeout = setTimeout;
-	        } else {
-	            cachedSetTimeout = defaultSetTimout;
-	        }
-	    } catch (e) {
-	        cachedSetTimeout = defaultSetTimout;
-	    }
-	    try {
-	        if (typeof clearTimeout === 'function') {
-	            cachedClearTimeout = clearTimeout;
-	        } else {
-	            cachedClearTimeout = defaultClearTimeout;
-	        }
-	    } catch (e) {
-	        cachedClearTimeout = defaultClearTimeout;
-	    }
-	} ())
-	function runTimeout(fun) {
-	    if (cachedSetTimeout === setTimeout) {
-	        //normal enviroments in sane situations
-	        return setTimeout(fun, 0);
-	    }
-	    // if setTimeout wasn't available but was latter defined
-	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-	        cachedSetTimeout = setTimeout;
-	        return setTimeout(fun, 0);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedSetTimeout(fun, 0);
-	    } catch(e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-	            return cachedSetTimeout.call(null, fun, 0);
-	        } catch(e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-	            return cachedSetTimeout.call(this, fun, 0);
-	        }
-	    }
-	
-	
-	}
-	function runClearTimeout(marker) {
-	    if (cachedClearTimeout === clearTimeout) {
-	        //normal enviroments in sane situations
-	        return clearTimeout(marker);
-	    }
-	    // if clearTimeout wasn't available but was latter defined
-	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-	        cachedClearTimeout = clearTimeout;
-	        return clearTimeout(marker);
-	    }
-	    try {
-	        // when when somebody has screwed with setTimeout but no I.E. maddness
-	        return cachedClearTimeout(marker);
-	    } catch (e){
-	        try {
-	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-	            return cachedClearTimeout.call(null, marker);
-	        } catch (e){
-	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-	            return cachedClearTimeout.call(this, marker);
-	        }
-	    }
-	
-	
-	
-	}
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-	
-	function cleanUpNextTick() {
-	    if (!draining || !currentQueue) {
-	        return;
-	    }
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-	
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = runTimeout(cleanUpNextTick);
-	    draining = true;
-	
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    runClearTimeout(timeout);
-	}
-	
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        runTimeout(drainQueue);
-	    }
-	};
-	
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-	
-	function noop() {}
-	
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-	
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-	
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
-
-/***/ },
-/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(3);
+	__webpack_require__(2);
 	module.exports = angular;
 
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports) {
 
 	/**
@@ -32663,7 +32476,7 @@
 	!window.angular.$$csp().noInlineStyle && window.angular.element(document.head).prepend('<style type="text/css">@charset "UTF-8";[ng\\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak,.ng-hide:not(.ng-hide-animate){display:none !important;}ng\\:form{display:block;}.ng-animate-shim{visibility:hidden;}.ng-anchor{position:absolute;}</style>');
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -32672,15 +32485,15 @@
 	  value: true
 	});
 	
-	var _angular = __webpack_require__(2);
+	var _angular = __webpack_require__(1);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _angularUiRouter = __webpack_require__(5);
+	var _angularUiRouter = __webpack_require__(4);
 	
 	var _angularUiRouter2 = _interopRequireDefault(_angularUiRouter);
 	
-	var _components = __webpack_require__(6);
+	var _components = __webpack_require__(5);
 	
 	var _components2 = _interopRequireDefault(_components);
 	
@@ -32711,7 +32524,7 @@
 	exports.default = app;
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -32722,7 +32535,7 @@
 	 */
 	(function webpackUniversalModuleDefinition(root, factory) {
 		if(true)
-			module.exports = factory(__webpack_require__(2));
+			module.exports = factory(__webpack_require__(1));
 		else if(typeof define === 'function' && define.amd)
 			define("angular-ui-router", ["angular"], factory);
 		else if(typeof exports === 'object')
@@ -41060,7 +40873,7 @@
 	//# sourceMappingURL=angular-ui-router.js.map
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41069,15 +40882,15 @@
 	  value: true
 	});
 	
-	var _angular = __webpack_require__(2);
+	var _angular = __webpack_require__(1);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _camelcase = __webpack_require__(7);
+	var _camelcase = __webpack_require__(6);
 	
 	var _camelcase2 = _interopRequireDefault(_camelcase);
 	
-	var _path = __webpack_require__(8);
+	var _path = __webpack_require__(7);
 	
 	var _path2 = _interopRequireDefault(_path);
 	
@@ -41095,7 +40908,7 @@
 	exports.default = components.name;
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -41150,7 +40963,7 @@
 
 
 /***/ },
-/* 8 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -41378,7 +41191,193 @@
 	    }
 	;
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
+
+/***/ },
+/* 8 */
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+	var process = module.exports = {};
+	
+	// cached from whatever global is present so that test runners that stub it
+	// don't break things.  But we need to wrap it in a try catch in case it is
+	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// function because try/catches deoptimize in certain engines.
+	
+	var cachedSetTimeout;
+	var cachedClearTimeout;
+	
+	function defaultSetTimout() {
+	    throw new Error('setTimeout has not been defined');
+	}
+	function defaultClearTimeout () {
+	    throw new Error('clearTimeout has not been defined');
+	}
+	(function () {
+	    try {
+	        if (typeof setTimeout === 'function') {
+	            cachedSetTimeout = setTimeout;
+	        } else {
+	            cachedSetTimeout = defaultSetTimout;
+	        }
+	    } catch (e) {
+	        cachedSetTimeout = defaultSetTimout;
+	    }
+	    try {
+	        if (typeof clearTimeout === 'function') {
+	            cachedClearTimeout = clearTimeout;
+	        } else {
+	            cachedClearTimeout = defaultClearTimeout;
+	        }
+	    } catch (e) {
+	        cachedClearTimeout = defaultClearTimeout;
+	    }
+	} ())
+	function runTimeout(fun) {
+	    if (cachedSetTimeout === setTimeout) {
+	        //normal enviroments in sane situations
+	        return setTimeout(fun, 0);
+	    }
+	    // if setTimeout wasn't available but was latter defined
+	    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+	        cachedSetTimeout = setTimeout;
+	        return setTimeout(fun, 0);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedSetTimeout(fun, 0);
+	    } catch(e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+	            return cachedSetTimeout.call(null, fun, 0);
+	        } catch(e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+	            return cachedSetTimeout.call(this, fun, 0);
+	        }
+	    }
+	
+	
+	}
+	function runClearTimeout(marker) {
+	    if (cachedClearTimeout === clearTimeout) {
+	        //normal enviroments in sane situations
+	        return clearTimeout(marker);
+	    }
+	    // if clearTimeout wasn't available but was latter defined
+	    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+	        cachedClearTimeout = clearTimeout;
+	        return clearTimeout(marker);
+	    }
+	    try {
+	        // when when somebody has screwed with setTimeout but no I.E. maddness
+	        return cachedClearTimeout(marker);
+	    } catch (e){
+	        try {
+	            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+	            return cachedClearTimeout.call(null, marker);
+	        } catch (e){
+	            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+	            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+	            return cachedClearTimeout.call(this, marker);
+	        }
+	    }
+	
+	
+	
+	}
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+	
+	function cleanUpNextTick() {
+	    if (!draining || !currentQueue) {
+	        return;
+	    }
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+	
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = runTimeout(cleanUpNextTick);
+	    draining = true;
+	
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    runClearTimeout(timeout);
+	}
+	
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        runTimeout(drainQueue);
+	    }
+	};
+	
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+	
+	function noop() {}
+	
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+	
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+	
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
 
 /***/ },
 /* 9 */
@@ -41653,10 +41652,11 @@
 	
 	  this.authenticate = function () {
 	    return userService.signin(_this.credentials).then(function () {
+	      _this.error = null;
 	      _this.success();
 	      return true;
-	    }).catch(function (error) {
-	      _this.error = error;
+	    }).catch(function (err) {
+	      _this.error = err || { message: 'Error Signing In.' };
 	      _this.cancel();
 	      return false;
 	    });
@@ -41667,7 +41667,7 @@
 /* 24 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2 style=\"margin-top: 10px;\">Sign In</h2>\n<form name=\"auth\" ng-submit=\"auth.$valid && $ctrl.authenticate()\" layout=\"column\">\n    <md-input-container>\n      <input name=\"email\" required placeholder=\"Email\" type=\"text\" ng-model=\"$ctrl.credentials.email\">\n      <div ng-messages=\"auth.email.$error\" role=\"alert\">\n        <div ng-message=\"required\">An email is required.</div>\n      </div>\n    </md-input-container>\n    <md-input-container>\n      <input name=\"password\" required placeholder=\"Password\" type=\"password\" ng-model=\"$ctrl.credentials.password\">\n      <div ng-messages=\"auth.password.$error\" role=\"alert\">\n        <div ng-message=\"required\">A password is required.</div>\n      </div>\n    </md-input-container>\n    <md-input-container>\n      <input name=\"eeToken\" required placeholder=\"EE Token\" type=\"password\" ng-model=\"$ctrl.credentials.token\">\n      <div ng-messages=\"auth.eeToken.$error\" role=\"alert\">\n        <div ng-message=\"required\">A token is required.</div>\n      </div>\n    </md-input-container>\n  </md-dialog-content>\n  <md-dialog-actions>\n    <md-button type=\"submit\">Sign In!</md-button>\n  </md-dialog-actions>\n  <md-dialog-actions>\n    <md-button ng-click=\"$ctrl.cancel()\">Cancel</md-button>\n  </md-dialog-actions>\n</form>\n<div class=\"error\" ng-if=\"$ctrl.error\">{{$ctrl.error.data.message}}</div>";
+	module.exports = "<h2 style=\"margin-top: 10px;\">Sign In</h2>\n<form name=\"auth\" ng-submit=\"auth.$valid && $ctrl.authenticate()\" layout=\"column\">\n    <md-input-container>\n      <input name=\"email\" required placeholder=\"Email\" type=\"text\" ng-model=\"$ctrl.credentials.email\">\n      <div ng-messages=\"auth.email.$error\" role=\"alert\">\n        <div ng-message=\"required\">An email is required.</div>\n      </div>\n    </md-input-container>\n    <md-input-container>\n      <input name=\"password\" required placeholder=\"Password\" type=\"password\" ng-model=\"$ctrl.credentials.password\">\n      <div ng-messages=\"auth.password.$error\" role=\"alert\">\n        <div ng-message=\"required\">A password is required.</div>\n      </div>\n    </md-input-container>\n    <md-input-container>\n      <input name=\"eeToken\" required placeholder=\"EE Token\" type=\"password\" ng-model=\"$ctrl.credentials.token\">\n      <div ng-messages=\"auth.eeToken.$error\" role=\"alert\">\n        <div ng-message=\"required\">A token is required.</div>\n      </div>\n    </md-input-container>\n  </md-dialog-content>\n  <md-dialog-actions>\n    <md-button type=\"submit\">Sign In!</md-button>\n  </md-dialog-actions>\n  <md-dialog-actions>\n    <md-button ng-click=\"$ctrl.cancel()\">Cancel</md-button>\n  </md-dialog-actions>\n</form>\n<div class=\"error\" ng-if=\"$ctrl.error\">{{$ctrl.error.message}}</div>";
 
 /***/ },
 /* 25 */
@@ -41707,10 +41707,11 @@
 	
 	  this.authenticate = function () {
 	    return userService.signup(_this.credentials).then(function () {
+	      _this.error = null;
 	      _this.success();
 	      return true;
 	    }).catch(function (err) {
-	      _this.error = err;
+	      _this.error = err || { message: 'Error Signing Up.' };
 	      _this.cancel();
 	      return false;
 	    });
@@ -41721,7 +41722,7 @@
 /* 26 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2 style=\"margin-top: 10px;\">Sign Up Here!</h2>\n<form name=\"auth\" ng-submit=\"$ctrl.authenticate()\" layout=\"column\">\n    <md-input-container class=\"md-accent\">\n      <input placeholder=\"Email\" type=\"text\" ng-model=\"$ctrl.credentials.email\">\n    </md-input-container>\n    <md-input-container>\n      <input placeholder=\"Password\" type=\"password\" ng-model=\"$ctrl.credentials.password\">\n    </md-input-container>\n    <md-input-container class=\"md-accent\">\n      <input placeholder=\"EE Token\" type=\"password\" ng-model=\"$ctrl.credentials.token\">\n    </md-input-container>\n  </md-dialog-content>\n  <md-dialog-actions>\n    <md-button type=\"submit\">Sign Up!</md-button>\n  </md-dialog-actions>\n  <md-dialog-actions>\n    <md-button ng-click=\"$ctrl.cancel()\">Cancel</md-button>\n  </md-dialog-actions>\n</form>\n<div class=\"error\" ng-if=\"$ctrl.error\">{{$ctrl.error.reason}}</div>";
+	module.exports = "<h2 style=\"margin-top: 10px;\">Sign Up Here!</h2>\n<form name=\"auth\" ng-submit=\"$ctrl.authenticate()\" layout=\"column\">\n    <md-input-container class=\"md-accent\">\n      <input placeholder=\"Email\" type=\"text\" ng-model=\"$ctrl.credentials.email\">\n    </md-input-container>\n    <md-input-container>\n      <input placeholder=\"Password\" type=\"password\" ng-model=\"$ctrl.credentials.password\">\n    </md-input-container>\n    <md-input-container class=\"md-accent\">\n      <input placeholder=\"EE Token\" type=\"password\" ng-model=\"$ctrl.credentials.token\">\n    </md-input-container>\n  </md-dialog-content>\n  <md-dialog-actions>\n    <md-button type=\"submit\">Sign Up!</md-button>\n  </md-dialog-actions>\n  <md-dialog-actions>\n    <md-button ng-click=\"$ctrl.cancel()\">Cancel</md-button>\n  </md-dialog-actions>\n</form>\n<div class=\"error\" ng-if=\"$ctrl.error\">{{$ctrl.error.message}}</div>";
 
 /***/ },
 /* 27 */
@@ -41733,7 +41734,7 @@
 	  value: true
 	});
 	exports.default = {
-	  template: '\n  <div>\n    <label>\n      <input type="radio" ng-model="$ctrl.action" value="signin">\n      Sign In\n    </label>\n    <label>\n      <input type="radio" ng-model="$ctrl.action" value="signup">\n      Sign Up\n    </label>\n  </div>\n  <signin ng-if="$ctrl.action===\'signin\'" success="$ctrl.success"></signin>\n  <signup ng-if="$ctrl.action===\'signup\'" success="$ctrl.success"></signup>\n  ',
+	  template: '\n  <div>\n    <label>\n      <input type="radio" ng-model="$ctrl.action" value="signin">\n      Sign In\n    </label>\n    <label>\n      <input type="radio" ng-model="$ctrl.action" value="signup">\n      Sign Up\n    </label>\n  </div>\n  <signin ng-if="$ctrl.action===\'signin\'" success="$ctrl.success" cancel="$ctrl.cancel"></signin>\n  <signup ng-if="$ctrl.action===\'signup\'" success="$ctrl.success" cancel="$ctrl.cancel"></signup>\n  ',
 	  bindings: {
 	    success: '<',
 	    cancel: '<'
@@ -42023,7 +42024,7 @@
 /* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "<md-card class=\"card-background\" layout=\"column\" layout-align=\"space-around center\">\n  <!--<h3 class=\"center-header\">Round-trip miles traveled: <span style=\"color: crimson\">{{$ctrl.totalTrip.totalMiles}}</span></h3>-->\n  <h3 class=\"center-header\" style=\"line-height: 1.5; margin-left: 20px; margin-right: 20px;\"><b>FINAL STEP:</b> Did you travel at all once you got to your destination city? If so, <span style=\"color: crimson\"><i>enter those trip legs here.</i></span> Your round-trip miles have already been logged, so <span style=\"color: crimson\"><i>you do not need include the return leg of your trip.</i></span> If you don't want to enter individual trip legs, check the box below and enter estimates for miles traveled at your destination city. If you logged no additional miles at your destination city, just click submit to proceed.</h3>\n  <!--<p>Please log miles of all other travel here. Enter individual trips if you traveled to multiple cities. Otherwise, check the box below and estimate mileage at your destination. Just click Submit Trip if you did not log any additional miles at your destination.</p>-->\n  <div layout=\"row\" layout-align=\"center center\">\n    <h3 class=\"checkbox-text\"><i>I'd like to estimate my mileage: </i></h3><md-checkbox ng-model=\"$ctrl.estimate\" aria-label=\"I'd like to estimate my mileage:\"></md-checkbox>\n  </div>\n</md-card>\n\n<md-card class=\"card-background\" layout=\"column\" layout-align=\"space-around center\">\n\n  <div ng-if=\"$ctrl.estimate\">\n    <h3 class=\"center-header\">Select all modes of transportation used at destination:</h3>\n\n    <div layout=\"row\" layout-align=\"center center\">\n      \n      <h3 class=\"checkbox-text\">Car:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.car\" aria-label=\"Car\">\n      </md-checkbox>\n      <h3 class=\"checkbox-text\">Bus:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.bus\" aria-label=\"Bus\">\n      </md-checkbox>\n      <h3 class=\"checkbox-text\">Train:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.train\" aria-label=\"Train\">\n      </md-checkbox>\n\n    </div>\n\n    <form name=\"miles\" ng-submit=\"miles.$valid && $ctrl.addTotalTrip()\" layout=\"column\" layout-align=\"space-around center\">\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.car\">\n        <h3 class=\"checkbox-text\">Miles by Car:</h3>\n        <md-input-container >\n          <input name=\"car\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.destMovements.car.distance\">\n        </md-input-container>\n      </div>\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.bus\">\n        <h3 class=\"checkbox-text\">Miles by Bus:</h3>\n        <md-input-container>\n            <input name=\"bus\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.destMovements.bus.distance\">\n        </md-input-container>\n      </div>\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.train\">\n        <h3 class=\"checkbox-text\">Miles by Train:</h3>\n        <md-input-container>\n          <input name=\"train\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.destMovements.train.distance\">\n        </md-input-container>\n      </div>\n    </form>\n  </div>\n\n  <form name=\"tripLeg\" ng-if=\"!$ctrl.estimate\" ng-submit=\"tripLeg.$valid && $ctrl.addTotalTrip()\" layout=\"column\" layout-align=\"space-around center\" style=\"margin-top: 15px;\">\n    <md-button ng-if=\"!$ctrl.roundTrip\" ng-click=\"$ctrl.addTripLeg()\" class=\"md-raised md-accent\">Add Trip Leg</md-button>\n    <div ng-repeat=\"trip in $ctrl.trips track by $index\" class=\"flex-container-row flex-center\">\n      <div layout=\"row\" layout-align=\"space-around center\">\n        <md-input-container>\n          <input name=\"fromCity\" required placeholder=\"Departure City:\" type=\"text\" ng-model=\"trip.fromCity\">\n          <div ng-messages=\"tripLeg.fromCity.$error\" role=\"alert\">\n            <div ng-message=\"required\">A departure city is required.</div>\n          </div>\n        </md-input-container>\n\n        <md-input-container style=\"padding-bottom: 25px;\">\n          <md-select ng-model=\"trip.fromState\" placeholder=\"State\">\n            <md-option ng-value=\"state\" ng-repeat=\"state in $ctrl.states\">{{ state }}</md-option>\n          </md-select>\n        </md-input-container>\n      </div>\n\n      <div layout=\"row\" layout-align=\"space-around center\">\n        <md-input-container>\n          <input name=\"to\" required placeholder=\"Destination City:\" type=\"text\" ng-model=\"trip.toCity\">\n          <div ng-messages=\"tripLeg.toCity.$error\" role=\"alert\">\n            <div ng-message=\"required\">A destination city is required.</div>\n          </div>\n        </md-input-container>\n\n          <md-input-container style=\"padding-bottom: 25px;\">\n            <md-select ng-model=\"trip.toState\" placeholder=\"State\">\n              <md-option ng-value=\"state\" ng-repeat=\"state in $ctrl.states\">{{ state }}</md-option>\n            </md-select>\n          </md-input-container>\n        </div>\n      \n      <md-button ng-click=\"$ctrl.removeTripLeg(trip, $index)\" class=\"md-raised md-warn\">Remove Trip Leg</md-button>\n    </div>\n    \n  </form>\n\n  <md-button type=\"submit\" class=\"md-raised md-accent\" ng-click=\"$ctrl.addTotalTrip()\">Submit Trip</md-button>\n\n</md-card>\n";
+	module.exports = "<md-card class=\"card-background\" layout=\"column\" layout-align=\"space-around center\">\n  <!--<h3 class=\"center-header\">Round-trip miles traveled: <span style=\"color: crimson\">{{$ctrl.totalTrip.totalMiles}}</span></h3>-->\n  <h3 class=\"center-header\" style=\"line-height: 1.5; margin-left: 20px; margin-right: 20px;\"><b>FINAL STEP:</b> Did you travel at all once you got to your destination city? If so, <span style=\"color: crimson\"><i>enter those trip legs here.</i></span> Your round-trip miles have already been logged, so <span style=\"color: crimson\"><i>you do not need to include the return leg of your trip.</i></span> If you don't want to enter individual trip legs, check the box below and enter estimates for miles traveled at your destination city. If you logged no additional miles at your destination city, just click submit to proceed.</h3>\n  <!--<p>Please log miles of all other travel here. Enter individual trips if you traveled to multiple cities. Otherwise, check the box below and estimate mileage at your destination. Just click Submit Trip if you did not log any additional miles at your destination.</p>-->\n  <div layout=\"row\" layout-align=\"center center\">\n    <h3 class=\"checkbox-text\"><i>I'd like to estimate my mileage: </i></h3><md-checkbox ng-model=\"$ctrl.estimate\" aria-label=\"I'd like to estimate my mileage:\"></md-checkbox>\n  </div>\n</md-card>\n\n<md-card class=\"card-background\" layout=\"column\" layout-align=\"space-around center\">\n\n  <div ng-if=\"$ctrl.estimate\">\n    <h3 class=\"center-header\">Select all modes of transportation used at destination:</h3>\n\n    <div layout=\"row\" layout-align=\"center center\">\n      \n      <h3 class=\"checkbox-text\">Car:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.car\" aria-label=\"Car\">\n      </md-checkbox>\n      <h3 class=\"checkbox-text\">Bus:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.bus\" aria-label=\"Bus\">\n      </md-checkbox>\n      <h3 class=\"checkbox-text\">Train:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.train\" aria-label=\"Train\">\n      </md-checkbox>\n\n    </div>\n\n    <form name=\"miles\" ng-submit=\"miles.$valid && $ctrl.addTotalTrip()\" layout=\"column\" layout-align=\"space-around center\">\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.car\">\n        <h3 class=\"checkbox-text\">Miles by Car:</h3>\n        <md-input-container >\n          <input name=\"car\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.destMovements.car.distance\">\n        </md-input-container>\n      </div>\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.bus\">\n        <h3 class=\"checkbox-text\">Miles by Bus:</h3>\n        <md-input-container>\n            <input name=\"bus\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.destMovements.bus.distance\">\n        </md-input-container>\n      </div>\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.train\">\n        <h3 class=\"checkbox-text\">Miles by Train:</h3>\n        <md-input-container>\n          <input name=\"train\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.destMovements.train.distance\">\n        </md-input-container>\n      </div>\n    </form>\n  </div>\n\n  <form name=\"tripLeg\" ng-if=\"!$ctrl.estimate\" ng-submit=\"tripLeg.$valid && $ctrl.addTotalTrip()\" layout=\"column\" layout-align=\"space-around center\" style=\"margin-top: 15px;\">\n    <md-button ng-if=\"!$ctrl.roundTrip\" ng-click=\"$ctrl.addTripLeg()\" class=\"md-raised md-accent\">Add Trip Leg</md-button>\n    <div ng-repeat=\"trip in $ctrl.trips track by $index\" class=\"flex-container-row flex-center\">\n      <div layout=\"row\" layout-align=\"space-around center\">\n        <md-input-container>\n          <input name=\"fromCity\" required placeholder=\"Departure City:\" type=\"text\" ng-model=\"trip.fromCity\">\n          <div ng-messages=\"tripLeg.fromCity.$error\" role=\"alert\">\n            <div ng-message=\"required\">A departure city is required.</div>\n          </div>\n        </md-input-container>\n\n        <md-input-container style=\"padding-bottom: 25px;\">\n          <md-select ng-model=\"trip.fromState\" placeholder=\"State\">\n            <md-option ng-value=\"state\" ng-repeat=\"state in $ctrl.states\">{{ state }}</md-option>\n          </md-select>\n        </md-input-container>\n      </div>\n\n      <div layout=\"row\" layout-align=\"space-around center\">\n        <md-input-container>\n          <input name=\"to\" required placeholder=\"Destination City:\" type=\"text\" ng-model=\"trip.toCity\">\n          <div ng-messages=\"tripLeg.toCity.$error\" role=\"alert\">\n            <div ng-message=\"required\">A destination city is required.</div>\n          </div>\n        </md-input-container>\n\n          <md-input-container style=\"padding-bottom: 25px;\">\n            <md-select ng-model=\"trip.toState\" placeholder=\"State\">\n              <md-option ng-value=\"state\" ng-repeat=\"state in $ctrl.states\">{{ state }}</md-option>\n            </md-select>\n          </md-input-container>\n        </div>\n      \n      <md-button ng-click=\"$ctrl.removeTripLeg(trip, $index)\" class=\"md-raised md-warn\">Remove Trip Leg</md-button>\n    </div>\n    \n  </form>\n\n  <md-button type=\"submit\" class=\"md-raised md-accent\" ng-click=\"$ctrl.addTotalTrip()\">Submit Trip</md-button>\n\n</md-card>\n";
 
 /***/ },
 /* 34 */
@@ -42261,7 +42262,8 @@
 	  template: _newTrip2.default,
 	  bindings: {
 	    airports: '<',
-	    users: '<'
+	    users: '<',
+	    user: '<'
 	  },
 	  controller: controller
 	};
@@ -42278,6 +42280,9 @@
 	    _this.options = ['Air', 'Ground'];
 	    _this.mode = 'Air';
 	    _this.groundMode = 'Car';
+	    _this.filteredUsers = _this.users.filter(function (user) {
+	      return user._id !== _this.user._id;
+	    });
 	
 	    _this.resetTrip = function () {
 	      _this.totalTrip = {
@@ -42325,7 +42330,7 @@
 /* 39 */
 /***/ function(module, exports) {
 
-	module.exports = "<md-content layout-padding>\n  <div ng-class=\"$ctrl.styles.new\">\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\" style=\"margin-top: 20px\">\n        <b>STEP 1:</b> Select your departure and return dates: \n      </h3>\n      <div layout-gt-xs=\"row\" layout-align-gt-xs=\"center center\">\n          <h4 style=\"margin-bottom: 10px;\">\n            Departure Date: \n          </h4>\n          <md-datepicker \n            ng-model=\"$ctrl.totalTrip.startDate\" \n            md-placeholder=\"Departure Date\">\n          </md-datepicker>\n          <h4 style=\"margin-bottom: 10px; margin-left: 25px;\">\n            Return Date: \n          </h4>\n          <md-datepicker \n            ng-model=\"$ctrl.totalTrip.endDate\" \n            md-placeholder=\"Return Date\">\n          </md-datepicker>\n      </div>\n    </md-card>\n\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\" style=\"margin-top: 20px\">\n        <b>STEP 2:</b> Did you travel with other employees? \n      </h3>\n      <div ng-if=\"!$ctrl.added\" style=\"margin-top: 8px; margin-right: 0px;\" layout=\"row\" layout-align=\"center center\">\n        <span style=\"margin-right: 5px; margin-bottom: 5px; font-size: 1.25em;\">\n          If so, click this button to add your travel companions:\n        </span>\n        <md-button ng-click=\"$ctrl.toggleSideNav()\" class=\"md-raised md-accent\">Add Travelers</md-button>\n      </div>\n      <h4 ng-if=\"$ctrl.added\" style=\"text-align: center; margin-bottom: 10px;\">Travel Companions Added. Thank You!</h4> \n    </md-card>\n\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\">\n        <b>STEP 3:</b> Select the mode of transportation to your destination city:\n      </h3>\n      <md-radio-group ng-model=\"$ctrl.mode\" layout=\"row\" layout-align=\"center\">\n        <md-radio-button \n          ng-repeat=\"mode in $ctrl.options\" \n          ng-value=\"mode\" \n          aria-label=\"{{mode}}\">\n          {{mode}}\n        </md-radio-button>\n      </md-radio-group>\n    </md-card>\n\n    <new-ground-trip \n      ng-if=\"$ctrl.mode === 'Ground'\" \n      total-trip=\"$ctrl.totalTrip\"> \n    </new-ground-trip>\n    <new-round-trip \n      ng-if=\"$ctrl.mode === 'Air' && $ctrl.airports\" \n      airports=\"$ctrl.airports\" \n      total-trip=\"$ctrl.totalTrip\"> \n    </new-round-trip>\n    <md-divider></md-divider>\n  </div>\n</md-content>\n\n<md-sidenav class=\"md-sidenav-right\" md-component-id=\"addUsers\">\n\n  <md-toolbar class=\"md-theme-light\">\n    <h3 class=\"center-header\">Select Travel Companions</h3>\n    <h4 style=\"margin-top: 20px; text-align: center; \">Select all of your travel companions below. If you don't see your fellow travelers, that means they haven't used this travel tracker app yet. You should remind them to sign up and start logging their trips!</h4>\n  </md-toolbar>\n  <md-content layout=\"column\" layout-align=\"space-around center\">\n    <div ng-repeat=\"user in $ctrl.users track by $index\">\n      <span style=\"margin-right: 5px;\"><b>{{user.email}}</b></span><md-checkbox ng-model=\"$ctrl.userConfirmations[$index]\" aria-label=\"{{user.email}}\"></md-checkbox>\n    </div>\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <md-button ng-click=\"$ctrl.addUsers()\" class=\"md-raised md-accent\">Add Selected Users</md-button>\n      <md-button ng-click=\"$ctrl.toggleSideNav()\" class=\"md-raised md-warn\">\n        Close Sidenav Right\n      </md-button>\n    </div>\n  </md-content>\n\n</md-sidenav>\n";
+	module.exports = "<md-content layout-padding>\n  <div ng-class=\"$ctrl.styles.new\">\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\" style=\"margin-top: 20px\">\n        <b>STEP 1:</b> Select your departure and return dates: \n      </h3>\n      <div layout-gt-xs=\"row\" layout-align-gt-xs=\"center center\">\n          <h4 style=\"margin-bottom: 10px;\">\n            Departure Date: \n          </h4>\n          <md-datepicker \n            ng-model=\"$ctrl.totalTrip.startDate\" \n            md-placeholder=\"Departure Date\">\n          </md-datepicker>\n          <h4 style=\"margin-bottom: 10px; margin-left: 25px;\">\n            Return Date: \n          </h4>\n          <md-datepicker \n            ng-model=\"$ctrl.totalTrip.endDate\" \n            md-placeholder=\"Return Date\">\n          </md-datepicker>\n      </div>\n    </md-card>\n\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\" style=\"margin-top: 20px\">\n        <b>STEP 2:</b> Did you travel with other employees? \n      </h3>\n      <div ng-if=\"!$ctrl.added\" style=\"margin-top: 8px; margin-right: 0px;\" layout=\"row\" layout-align=\"center center\">\n        <span style=\"margin-right: 5px; margin-bottom: 5px; font-size: 1.25em;\">\n          If so, click this button to add your travel companions:\n        </span>\n        <md-button ng-click=\"$ctrl.toggleSideNav()\" class=\"md-raised md-accent\">Add Travelers</md-button>\n      </div>\n      <h4 ng-if=\"$ctrl.added\" style=\"text-align: center; margin-bottom: 10px;\">Travel Companions Added. Thank You!</h4> \n    </md-card>\n\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\">\n        <b>STEP 3:</b> Select the mode of transportation to your destination city:\n      </h3>\n      <md-radio-group ng-model=\"$ctrl.mode\" layout=\"row\" layout-align=\"center\">\n        <md-radio-button \n          ng-repeat=\"mode in $ctrl.options\" \n          ng-value=\"mode\" \n          aria-label=\"{{mode}}\">\n          {{mode}}\n        </md-radio-button>\n      </md-radio-group>\n    </md-card>\n\n    <new-ground-trip \n      ng-if=\"$ctrl.mode === 'Ground'\" \n      total-trip=\"$ctrl.totalTrip\"> \n    </new-ground-trip>\n    <new-round-trip \n      ng-if=\"$ctrl.mode === 'Air' && $ctrl.airports\" \n      airports=\"$ctrl.airports\" \n      total-trip=\"$ctrl.totalTrip\"> \n    </new-round-trip>\n    <md-divider></md-divider>\n  </div>\n</md-content>\n\n<md-sidenav class=\"md-sidenav-right\" md-component-id=\"addUsers\">\n\n  <md-toolbar class=\"md-theme-light\">\n    <h3 class=\"center-header\">Select Travel Companions</h3>\n    <md-divider></md-divider>\n    <p style=\"margin: 20px; text-align: center; font-size: 1.25em; font-weight: 400;\">If you don't see your fellow travelers, that means they haven't used this travel tracker app yet. You should remind them to sign up and start logging their trips!</p>\n  </md-toolbar>\n  <md-content layout=\"column\" layout-align=\"space-around center\">\n    <div ng-repeat=\"user in $ctrl.filteredUsers track by $index\" style=\"margin-top: 10px;\">\n      <span style=\"margin-right: 5px;\"><b>{{user.email}}</b></span><md-checkbox ng-model=\"$ctrl.userConfirmations[$index]\" aria-label=\"{{user.email}}\"></md-checkbox>\n    </div>\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <md-button ng-click=\"$ctrl.addUsers()\" class=\"md-raised md-accent\">Add Selected Users</md-button>\n      <md-button ng-click=\"$ctrl.toggleSideNav()\" class=\"md-raised md-warn\">\n        Cancel\n      </md-button>\n    </div>\n  </md-content>\n\n</md-sidenav>\n";
 
 /***/ },
 /* 40 */
@@ -42406,8 +42411,16 @@
 	  bindings: {
 	    user: '<'
 	  },
-	  controller: function controller() {}
+	  controller: controller
 	};
+	
+	
+	controller.$inject = ['flightService'];
+	function controller(flightService) {
+	  this.$onInit = function () {
+	    flightService.getAll();
+	  };
+	}
 
 /***/ },
 /* 45 */
@@ -42425,15 +42438,15 @@
 	  value: true
 	});
 	
-	var _angular = __webpack_require__(2);
+	var _angular = __webpack_require__(1);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
-	var _camelcase = __webpack_require__(7);
+	var _camelcase = __webpack_require__(6);
 	
 	var _camelcase2 = _interopRequireDefault(_camelcase);
 	
-	var _path = __webpack_require__(8);
+	var _path = __webpack_require__(7);
 	
 	var _path2 = _interopRequireDefault(_path);
 	
@@ -69304,7 +69317,7 @@
 	    });
 	  }
 	
-	  getAll();
+	  // getAll();
 	
 	  return { getAll: getAll, getDistance: getDistance, cleanDistance: cleanDistance };
 	}
@@ -69487,7 +69500,7 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	// Should already be required, here for clarity
-	__webpack_require__(2);
+	__webpack_require__(1);
 	
 	// Load Angular and dependent libs
 	__webpack_require__(211);
@@ -107816,7 +107829,7 @@
 	 */
 	(function webpackUniversalModuleDefinition(root, factory) {
 		if(true)
-			module.exports = factory(__webpack_require__(2));
+			module.exports = factory(__webpack_require__(1));
 		else if(typeof define === 'function' && define.amd)
 			define("angular-ui-router", ["angular"], factory);
 		else if(typeof exports === 'object')
@@ -108059,6 +108072,9 @@
 	      }],
 	      users: ['userService', function (user) {
 	        return user.getAll();
+	      }],
+	      user: ['userService', function (u) {
+	        return u.getMe();
 	      }]
 	    },
 	    views: {
@@ -108189,7 +108205,7 @@
 	});
 	exports.default = auth;
 	
-	var _angular = __webpack_require__(2);
+	var _angular = __webpack_require__(1);
 	
 	var _angular2 = _interopRequireDefault(_angular);
 	
