@@ -24036,8 +24036,9 @@ md-checkbox span {
 .error {
   border: 2px solid darkred;
   border-radius: 15px;
-  opacity: 0.6;
+  opacity: 0.8;
   background-color: red;
+  color: black;
   width: 75%;
   height: 25px;
   margin-bottom: 20px;
