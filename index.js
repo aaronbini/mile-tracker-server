@@ -1,5 +1,5 @@
 'use strict';
-
+require('dotenv').load();
 const app = require('./lib/app');
 require('./lib/mongoose-setup');
 const http = require('http');
@@ -9,3 +9,13 @@ const server = http.createServer(app);
 server.listen(port, () => {
   console.log('server running at', server.address());
 });
+
+/**
+ * App features to implement:
+ * password reset
+ * ability to delete one's own trip
+ * ability for admins to delete trips
+ * implement organization
+ * remove need for "org" password
+ * 
+ */
