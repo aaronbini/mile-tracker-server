@@ -6,6 +6,11 @@
     right: 0;
     top: 0;
     text-align: right; }
+.aggregate-text {
+  color: lightgray; }
+
+.welcome-text {
+  color: wheat; }
 /*!
  * Angular Material Design
  * https://github.com/angular/material
@@ -23993,7 +23998,7 @@ md-checkbox span {
   max-height: 48px; }
 
 .logo {
-  width: 194px;
+  max-width: 194px;
   height: 100px;
   margin-top: 15px;
   margin-left: 15px;
@@ -24039,8 +24044,8 @@ md-checkbox span {
   opacity: 0.8;
   background-color: red;
   color: black;
-  width: 75%;
-  height: 25px;
+  width: 95%;
+  height: 40px;
   margin-bottom: 20px;
   margin-top: 10px;
   display: flex;
@@ -24062,6 +24067,14 @@ md-checkbox span {
 /* The finishing CSS styles for the enter animation */
 .fade.ng-enter.ng-enter-active {
   opacity: 1; }
+
+.dialog-display {
+  min-width: 500px;
+  max-width: 500px; }
+
+.dialog-display-password-reset {
+  width: 500px;
+  margin: 20px; }
 
 @media (max-width: 800px) {
   .flex-container {
