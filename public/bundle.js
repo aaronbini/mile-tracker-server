@@ -41860,7 +41860,6 @@
 	  this.successMessage = 'Your trip has been successfully added.';
 	
 	  this.$onInit = function () {
-	    console.log('user: ', _this.user);
 	    if (_this.newTrip) {
 	      _this.showSuccessMessage();
 	    }
@@ -42172,7 +42171,6 @@
 	
 	  //submit ground trips
 	  this.addTripLegs = function () {
-	    console.log('adding trip legs');
 	    var tripQueries = _this.trips.map(function (trip) {
 	      return { from: trip.fromCity + '+' + trip.fromState, to: trip.toCity + '+' + trip.toState };
 	    });
@@ -108403,7 +108401,6 @@
 	          controller: ['$scope', function ($scope) {
 	            $scope.success = function () {
 	              $mdDialog.hide();
-	              console.log('toState: ', toState);
 	              return $state.go(toState.name, toParams);
 	            };
 	            $scope.passwordResetRequestSuccess = function () {
