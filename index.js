@@ -3,7 +3,7 @@ require('dotenv').load();
 const app = require('./lib/app');
 require('./lib/mongoose-setup');
 const http = require('http');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8082;
 
 const server = http.createServer(app);
 server.listen(port, () => {
@@ -12,10 +12,8 @@ server.listen(port, () => {
 
 /**
  * App features to implement:
- * password reset
  * ability to delete one's own trip
  * ability for admins to delete trips
- * implement organization
  * remove need for "org" password
  * 
  */

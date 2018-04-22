@@ -54,24 +54,24 @@
 	
 	var _app2 = _interopRequireDefault(_app);
 	
-	var _routes = __webpack_require__(221);
+	var _routes = __webpack_require__(224);
 	
 	var _routes2 = _interopRequireDefault(_routes);
 	
-	var _auth = __webpack_require__(222);
+	var _auth = __webpack_require__(225);
 	
 	var _auth2 = _interopRequireDefault(_auth);
 	
-	var _http = __webpack_require__(223);
+	var _http = __webpack_require__(226);
 	
 	var _http2 = _interopRequireDefault(_http);
 	
-	__webpack_require__(224);
+	__webpack_require__(227);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	_app2.default.constant('apiUrl', '/api');
-	//app.constant('apiUrl', 'http://localhost:3000/api');
+	//app.constant('apiUrl', '/api');
+	_app2.default.constant('apiUrl', 'http://localhost:8082/api');
 	
 	_app2.default.config(_http2.default);
 	_app2.default.config(_routes2.default);
@@ -32498,21 +32498,21 @@
 	
 	var _components2 = _interopRequireDefault(_components);
 	
-	var _services = __webpack_require__(46);
+	var _services = __webpack_require__(49);
 	
 	var _services2 = _interopRequireDefault(_services);
 	
-	var _angularMaterial = __webpack_require__(210);
+	var _angularMaterial = __webpack_require__(213);
 	
 	var _angularMaterial2 = _interopRequireDefault(_angularMaterial);
 	
-	var _angularMessages = __webpack_require__(216);
+	var _angularMessages = __webpack_require__(219);
 	
 	var _angularMessages2 = _interopRequireDefault(_angularMessages);
 	
-	__webpack_require__(218);
+	__webpack_require__(221);
 	
-	__webpack_require__(220);
+	__webpack_require__(223);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -41388,18 +41388,19 @@
 		"./admin/admin-detail/admin-detail.js": 10,
 		"./admin/admin.js": 12,
 		"./app/app-header/app-header.js": 14,
-		"./app/app.js": 21,
-		"./auth/signin/signin.js": 23,
-		"./auth/signup/signup.js": 25,
-		"./auth/user-auth.js": 27,
-		"./dashboard/dashboard-header/dashboard-header.js": 28,
-		"./dashboard/dashboard.js": 30,
-		"./new-trip/destination-movements/destination-movements.js": 32,
-		"./new-trip/new-ground-trip/new-ground-trip.js": 34,
-		"./new-trip/new-round-trip/new-round-trip.js": 36,
-		"./new-trip/new-trip.js": 38,
-		"./trip-detail/trip-detail.js": 42,
-		"./welcome/welcome.js": 44
+		"./app/app.js": 20,
+		"./auth/signin/signin.js": 22,
+		"./auth/signup/signup.js": 24,
+		"./auth/user-auth.js": 26,
+		"./dashboard/dashboard-header/dashboard-header.js": 27,
+		"./dashboard/dashboard.js": 29,
+		"./new-trip/destination-movements/destination-movements.js": 33,
+		"./new-trip/new-ground-trip/new-ground-trip.js": 35,
+		"./new-trip/new-round-trip/new-round-trip.js": 37,
+		"./new-trip/new-trip.js": 39,
+		"./reset/reset.js": 43,
+		"./trip-detail/trip-detail.js": 45,
+		"./welcome/welcome.js": 47
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -41534,7 +41535,7 @@
 	
 	var _appHeader2 = _interopRequireDefault(_appHeader);
 	
-	var _appHeader3 = __webpack_require__(17);
+	var _appHeader3 = __webpack_require__(16);
 	
 	var _appHeader4 = _interopRequireDefault(_appHeader3);
 	
@@ -41547,14 +41548,19 @@
 	};
 	
 	
-	controller.$inject = ['userService', '$state'];
+	controller.$inject = ['userService', '$state', '$scope'];
 	
-	function controller(userService, $state) {
+	function controller(userService, $state, $scope) {
+	  var _this = this;
+	
 	  this.styles = _appHeader4.default;
 	  this.logout = function () {
-	    //could remove airports here, but might prefer to leave it since
-	    //this get request is extremely slow
-	    // $window.localStorage.removeItem('airports');
+	    if (_this.orgName) {
+	      _this.orgName = null;
+	    }
+	    if (_this.orgImg) {
+	      _this.orgImg = null;
+	    }
 	    userService.logout();
 	    $state.go('welcome');
 	  };
@@ -41568,28 +41574,22 @@
 
 /***/ },
 /* 15 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	module.exports = "<section ng-class=\"$ctrl.styles.header\">\n    <div class=\"flex-container-row\">\n      <img class=\"logo\" src=\"" + __webpack_require__(16) + "\" alt=\"../../../../images/ee_logo.png\">\n      <h1 style=\"margin-top: 45px; font-size: 3em;\">Equal Exchange Travel Tracker</h1>\n    </div>\n    <div ng-cloak>\n      <md-content class=\"md-padding\">\n          <md-nav-bar md-selected-nav-item=\"currentNavItem\" nav-bar-aria-label=\"navigation links\">\n            <md-nav-item md-nav-sref=\"dashboard\" name=\"enter\">Enter Site</md-nav-item>\n            <!-- below section holds transcluded html passed in via ui-view -->\n            <section class=\"custom-headers\" ng-transclude></section>\n          </md-nav-bar>\n      </md-content>\n    </div>\n</section>\n\n\n";
+	module.exports = "<section ng-class=\"$ctrl.styles.header\">\n    <div class=\"flex-container-row\">\n      <img ng-if=\"$ctrl.orgImg\" class=\"logo\" ng-src=\"../../../../images/{{$ctrl.orgImg}}\">\n      <h1 ng-if=\"$ctrl.orgName\" style=\"margin-top: 45px; font-size: 3em;\">{{$ctrl.orgName}} Travel Tracker</h1>\n      <h1 ng-if=\"!$ctrl.orgName\" style=\"margin-top: 45px; font-size: 3em;\">Travel Tracker</h1>\n    </div>\n    <div ng-cloak>\n      <md-content class=\"md-padding\">\n          <md-nav-bar md-selected-nav-item=\"currentNavItem\" nav-bar-aria-label=\"navigation links\">\n            <md-nav-item md-nav-sref=\"dashboard\" name=\"enter\">Enter Site</md-nav-item>\n            <!-- below section holds transcluded html passed in via ui-view -->\n            <section class=\"custom-headers\" ng-transclude></section>\n          </md-nav-bar>\n      </md-content>\n    </div>\n</section>\n\n\n";
 
 /***/ },
 /* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__.p + "27011966101d42493e79f0f998b0f36f.jpg";
-
-/***/ },
-/* 17 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 	module.exports = {"header":"OhiHL4NG6fW_GWJZ5Qiat"};
 
 /***/ },
+/* 17 */,
 /* 18 */,
 /* 19 */,
-/* 20 */,
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41598,7 +41598,7 @@
 	  value: true
 	});
 	
-	var _app = __webpack_require__(22);
+	var _app = __webpack_require__(21);
 	
 	var _app2 = _interopRequireDefault(_app);
 	
@@ -41610,13 +41610,13 @@
 	};
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "<md-content>\n  <div class=\"full-height\">\n    <header>\n        <app-header>\n            <ui-view name=\"header\"></ui-view>\n        </app-header>\n    </header>\n\n    <main>\n        <ui-view name=\"main\">\n           <div layout=\"row\" layout-align=\"space-around\">Loading...\n            <md-progress-circular md-mode=\"indeterminate\"></md-progress-circular>\n          </div>\n        </ui-view>\n    </main>\n    <footer class=\"flex-container-row\">\n      <h5>&copy; EE Travel Tracker</h5>\n      <a href=\"https://github.com/aaronbini/mile-tracker\" style=\"margin-left: 25px;\"><h5>Source Code</h5></a>\n    </footer>\n  </div>\n</md-content>\n";
+	module.exports = "<md-content>\n  <div class=\"full-height\">\n    <header>\n        <app-header>\n            <ui-view name=\"header\"></ui-view>\n        </app-header>\n    </header>\n\n    <main>\n        <ui-view name=\"main\">\n           <div layout=\"row\" layout-align=\"space-around\">Loading...\n            <md-progress-circular md-mode=\"indeterminate\"></md-progress-circular>\n          </div>\n        </ui-view>\n    </main>\n    <footer class=\"flex-container-row\">\n      <h5>&copy; Travel Tracker</h5>\n      <a href=\"https://github.com/aaronbini/mile-tracker\" style=\"margin-left: 25px;\"><h5>Source Code</h5></a>\n    </footer>\n  </div>\n</md-content>\n";
 
 /***/ },
-/* 23 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41625,7 +41625,7 @@
 	  value: true
 	});
 	
-	var _signin = __webpack_require__(24);
+	var _signin = __webpack_require__(23);
 	
 	var _signin2 = _interopRequireDefault(_signin);
 	
@@ -41635,7 +41635,8 @@
 	  template: _signin2.default,
 	  bindings: {
 	    success: '<',
-	    cancel: '<'
+	    cancel: '<',
+	    passwordResetRequestSuccess: '<'
 	  },
 	  controller: controller
 	};
@@ -41647,9 +41648,9 @@
 	
 	  this.credentials = {
 	    email: '',
-	    password: '',
-	    token: ''
+	    password: ''
 	  };
+	  this.passwordRequestSuccess = false;
 	
 	  this.authenticate = function () {
 	    return userService.signin(_this.credentials).then(function () {
@@ -41660,16 +41661,29 @@
 	      _this.error = err.error || 'Error Signing In.';
 	    });
 	  };
+	
+	  this.requestPasswordReset = function () {
+	    userService.requestPasswordReset({ email: _this.credentials.email }).then(function () {
+	      _this.error = null;
+	      _this.passwordRequestSuccess = true;
+	      _this.showDialogOptions = false;
+	      setTimeout(function () {
+	        return _this.passwordResetRequestSuccess();
+	      }, 7000);
+	    }).catch(function () {
+	      return _this.error = 'Error with the request. Be sure you have entered the correct email above.';
+	    });
+	  };
 	};
 
 /***/ },
-/* 24 */
+/* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2 style=\"margin-top: 10px;\">Sign In</h2>\n<form name=\"auth\" ng-submit=\"auth.$valid && $ctrl.authenticate()\" layout=\"column\">\n    <md-input-container>\n      <input name=\"email\" required placeholder=\"Email\" type=\"text\" ng-model=\"$ctrl.credentials.email\">\n      <div ng-messages=\"auth.email.$error\" role=\"alert\">\n        <div ng-message=\"required\">An email is required.</div>\n      </div>\n    </md-input-container>\n    <md-input-container>\n      <input name=\"password\" required placeholder=\"Password\" type=\"password\" ng-model=\"$ctrl.credentials.password\">\n      <div ng-messages=\"auth.password.$error\" role=\"alert\">\n        <div ng-message=\"required\">A password is required.</div>\n      </div>\n    </md-input-container>\n    <md-input-container>\n      <input name=\"eeToken\" required placeholder=\"EE Token\" type=\"password\" ng-model=\"$ctrl.credentials.token\">\n      <div ng-messages=\"auth.eeToken.$error\" role=\"alert\">\n        <div ng-message=\"required\">A token is required.</div>\n      </div>\n    </md-input-container>\n  </md-dialog-content>\n  <md-dialog-actions>\n    <md-button type=\"submit\">Sign In!</md-button>\n  </md-dialog-actions>\n  <md-dialog-actions>\n    <md-button ng-click=\"$ctrl.cancel()\">Cancel</md-button>\n  </md-dialog-actions>\n</form>\n<div class=\"error\" ng-if=\"$ctrl.error\">{{$ctrl.error}}</div>";
+	module.exports = "<h2 ng-if=\"!$ctrl.passwordRequestSuccess\" style=\"margin-top: 10px;\">Sign In</h2>\n<form class=\"dialog-display\" ng-if=\"!$ctrl.passwordRequestSuccess\" name=\"auth\" ng-submit=\"auth.$valid && $ctrl.authenticate()\" layout=\"column\">\n    <md-input-container>\n      <input name=\"email\" required placeholder=\"Email\" type=\"text\" ng-model=\"$ctrl.credentials.email\">\n      <div ng-messages=\"auth.email.$error\" role=\"alert\">\n        <div ng-message=\"required\">An email is required.</div>\n      </div>\n    </md-input-container>\n    <md-input-container>\n      <input name=\"password\" required placeholder=\"Password\" type=\"password\" ng-model=\"$ctrl.credentials.password\">\n      <div ng-messages=\"auth.password.$error\" role=\"alert\">\n        <div ng-message=\"required\">A password is required.</div>\n      </div>\n    </md-input-container>\n  </md-dialog-content>\n  <md-dialog-actions>\n    <md-button type=\"submit\">Sign In!</md-button>\n  </md-dialog-actions>\n  <md-dialog-actions>\n    <md-button ng-click=\"$ctrl.cancel()\">Cancel</md-button>\n  </md-dialog-actions>\n  <md-dialog-actions>\n    <md-button ng-click=\"$ctrl.requestPasswordReset()\">Reset Password</md-button>\n  </md-dialog-actions>\n</form>\n<div class=\"dialog-display-password-reset\" ng-if=\"$ctrl.passwordRequestSuccess\">You will receive an email soon with a link that will allow you to reset your password. You will be re-directed to the Welcome page shortly. Thank you!</div>\n<div class=\"error\" ng-if=\"$ctrl.error\">{{$ctrl.error}}</div>";
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41678,7 +41692,7 @@
 	  value: true
 	});
 	
-	var _signup = __webpack_require__(26);
+	var _signup = __webpack_require__(25);
 	
 	var _signup2 = _interopRequireDefault(_signup);
 	
@@ -41699,9 +41713,9 @@
 	  var _this = this;
 	
 	  this.credentials = {
-	    token: '',
 	    email: '',
-	    password: ''
+	    password: '',
+	    token: ''
 	  };
 	
 	  this.authenticate = function () {
@@ -41716,13 +41730,13 @@
 	};
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports) {
 
-	module.exports = "<h2 style=\"margin-top: 10px;\">Sign Up Here!</h2>\n<form name=\"auth\" ng-submit=\"$ctrl.authenticate()\" layout=\"column\">\n    <md-input-container class=\"md-accent\">\n      <input placeholder=\"Email\" type=\"text\" ng-model=\"$ctrl.credentials.email\">\n    </md-input-container>\n    <md-input-container>\n      <input placeholder=\"Password\" type=\"password\" ng-model=\"$ctrl.credentials.password\">\n    </md-input-container>\n    <md-input-container class=\"md-accent\">\n      <input placeholder=\"EE Token\" type=\"password\" ng-model=\"$ctrl.credentials.token\">\n    </md-input-container>\n  </md-dialog-content>\n  <md-dialog-actions>\n    <md-button type=\"submit\">Sign Up!</md-button>\n  </md-dialog-actions>\n  <md-dialog-actions>\n    <md-button ng-click=\"$ctrl.cancel()\">Cancel</md-button>\n  </md-dialog-actions>\n</form>\n<div class=\"error\" ng-if=\"$ctrl.error\">{{$ctrl.error}}</div>";
+	module.exports = "<h2 style=\"margin-top: 10px;\">Sign Up Here!</h2>\n<form class=\"dialog-display\" name=\"auth\" ng-submit=\"$ctrl.authenticate()\" layout=\"column\">\n    <md-input-container class=\"md-accent\">\n      <input placeholder=\"Email\" type=\"text\" ng-model=\"$ctrl.credentials.email\">\n    </md-input-container>\n    <md-input-container>\n      <input placeholder=\"Password\" type=\"password\" ng-model=\"$ctrl.credentials.password\">\n    </md-input-container>\n    <md-input-container class=\"md-accent\">\n      <input placeholder=\"Org Token\" type=\"password\" ng-model=\"$ctrl.credentials.token\">\n    </md-input-container>\n  </md-dialog-content>\n  <md-dialog-actions>\n    <md-button type=\"submit\">Sign Up!</md-button>\n  </md-dialog-actions>\n  <md-dialog-actions>\n    <md-button ng-click=\"$ctrl.cancel()\">Cancel</md-button>\n  </md-dialog-actions>\n</form>\n<div class=\"error\" ng-if=\"$ctrl.error\">{{$ctrl.error}}</div>";
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -41731,10 +41745,11 @@
 	  value: true
 	});
 	exports.default = {
-	  template: '\n  <div>\n    <label>\n      <input type="radio" ng-model="$ctrl.action" value="signin">\n      Sign In\n    </label>\n    <label>\n      <input type="radio" ng-model="$ctrl.action" value="signup">\n      Sign Up\n    </label>\n  </div>\n  <signin ng-if="$ctrl.action===\'signin\'" success="$ctrl.success" cancel="$ctrl.cancel"></signin>\n  <signup ng-if="$ctrl.action===\'signup\'" success="$ctrl.success" cancel="$ctrl.cancel"></signup>\n  ',
+	  template: '\n  <div ng-if="$ctrl.showDialogOptions">\n    <label>\n      <input type="radio" ng-model="$ctrl.action" value="signin">\n      Sign In\n    </label>\n    <label>\n      <input type="radio" ng-model="$ctrl.action" value="signup">\n      Sign Up\n    </label>\n  </div>\n  <signin display="min-width: 500px;" ng-if="$ctrl.action===\'signin\'" success="$ctrl.success" cancel="$ctrl.cancel" password-reset-request-success="$ctrl.passwordResetRequestSuccess" show-dialog-options="showDialogOptions"></signin>\n  <signup ng-if="$ctrl.action===\'signup\'" success="$ctrl.success" cancel="$ctrl.cancel"></signup>\n  ',
 	  bindings: {
 	    success: '<',
-	    cancel: '<'
+	    cancel: '<',
+	    passwordResetRequestSuccess: '<'
 	  },
 	  controller: controller
 	};
@@ -41742,10 +41757,11 @@
 	
 	function controller() {
 	  this.action = 'signin';
+	  this.showDialogOptions = true;
 	}
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41754,7 +41770,7 @@
 	  value: true
 	});
 	
-	var _dashboardHeader = __webpack_require__(29);
+	var _dashboardHeader = __webpack_require__(28);
 	
 	var _dashboardHeader2 = _interopRequireDefault(_dashboardHeader);
 	
@@ -41762,6 +41778,9 @@
 	
 	exports.default = {
 	  template: _dashboardHeader2.default,
+	  bindings: {
+	    user: '<'
+	  },
 	  require: {
 	    parent: '^appHeader'
 	  },
@@ -41775,6 +41794,9 @@
 	
 	  this.$onInit = function () {
 	    _this.logout = _this.parent.logout;
+	    //set img path for header
+	    _this.parent.orgName = _this.user.organization.name;
+	    _this.parent.orgImg = _this.user.organization.img;
 	    _this.isAuthenticated = userService.isAuthenticated();
 	    userService.isAdmin().then(function (isAdmin) {
 	      return _this.isAdmin = isAdmin;
@@ -41788,13 +41810,13 @@
 	}
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports) {
 
 	module.exports = "<md-nav-bar md-selected-nav-item=\"currentNavItem\" nav-bar-aria-label=\"navigation links\">\n  <md-nav-item ng-if=\"$ctrl.isAuthenticated\" md-nav-sref=\"dashboard\" name=\"dashboard\">Dashboard</md-nav-item>\n  <md-nav-item ng-if=\"$ctrl.isAuthenticated\" md-nav-sref=\"newTrip\" name=\"newTrip\">Add Trip</a></md-nav-item>\n  <md-nav-item ng-if=\"$ctrl.isAdmin\" md-nav-sref=\"admin\" name=\"admin\">Admin</a></md-nav-item>\n  <md-nav-item ng-if=\"$ctrl.isAuthenticated\" md-nav-click=\"$ctrl.logout()\" name=\"logout\">Log Out</md-nav-item>\n</md-nav-bar>";
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41805,9 +41827,13 @@
 	
 	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 	
-	var _dashboard = __webpack_require__(31);
+	var _dashboard = __webpack_require__(30);
 	
 	var _dashboard2 = _interopRequireDefault(_dashboard);
+	
+	var _dashboard3 = __webpack_require__(31);
+	
+	var _dashboard4 = _interopRequireDefault(_dashboard3);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -41815,6 +41841,7 @@
 	
 	exports.default = {
 	  template: _dashboard2.default,
+	  styles: _dashboard4.default,
 	  bindings: {
 	    trips: '<',
 	    user: '<',
@@ -41833,14 +41860,10 @@
 	  this.successMessage = 'Your trip has been successfully added.';
 	
 	  this.$onInit = function () {
+	    console.log('user: ', _this.user);
 	    if (_this.newTrip) {
 	      _this.showSuccessMessage();
 	    }
-	
-	    _this.companyTotals = _this.companyMiles.reduce(function (accumulator, mode) {
-	      accumulator[mode._id] += mode.total;
-	      return accumulator;
-	    }, { car: 0, air: 0, bus: 0, train: 0 });
 	    _this.confirmed = [];
 	    for (var i = 0; i < _this.unconfirmed.length; i++) {
 	      _this.confirmed[i] = false;
@@ -41900,13 +41923,20 @@
 	}
 
 /***/ },
+/* 30 */
+/***/ function(module, exports) {
+
+	module.exports = "<md-card ng-if=\"$ctrl.unconfirmed.length > 0\" class=\"card-background\" layout=\"column\" layout-align=\"space-around center\">\n  <h3 class=\"center-header\" style=\"color: crimson;\"><b>You've been added as a trip companion!</b></h3>\n  <span style=\"font-size: 1.25em; text-align: center; line-height: 1.5; margin-bottom: 20px;\">Looks like you've been added as a travel companion by one of your fellow employees. Those trips are listed below. Check the box to confirm that you were a part of this trip and then click the button to add the trip. It will automatically be added to your trips, so there's no need to add it separately.</span>\n  <div ng-repeat=\"unconfirmed in $ctrl.unconfirmed track by $index\">\n    <div layout=\"row\" layout-align=\"center center\">\n      <h3 style=\"margin-bottom: 16px; margin-right: 10px; text-decoration: underline;\">\n        Trip to {{unconfirmed.name}} \n        from {{unconfirmed.startDate | date: 'shortDate'}} \n        to {{unconfirmed.endDate | date: 'shortDate'}}\n      </h3>\n      <md-checkbox ng-model=\"$ctrl.confirmed[$index]\" aria-label=\"Were you part of this trip?\"></md-checkbox>\n    </div>        \n  </div>\n  <md-button class=\"md-raised md-accent\" ng-click=\"$ctrl.addConfirmations()\">Add Selected Trips</md-button>\n</md-card>\n\n<md-card class=\"card-background\" layout=\"row\" layout-align=\"center stretch\">\n    \n  <md-card class=\"inset-background\" layout=\"column\" layout-align=\"start center\">\n    <h3 ng-if=\"$ctrl.showMessage\" class=\"fade\">{{$ctrl.successMessage}}</h3>\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <h3 class=\"center-header\">Total miles you've traveled</h3>\n      <h3>By Air: <span class=\"aggregate-text\">{{$ctrl.milesTraveled.air | number : 0}}</span></h3>\n      <h3>By Car: <span class=\"aggregate-text\">{{$ctrl.milesTraveled.car | number : 0}}</span></h3>\n      <h3>By Bus: <span class=\"aggregate-text\">{{$ctrl.milesTraveled.bus | number : 0}}</span></h3>\n      <h3>By Train: <span class=\"aggregate-text\">{{$ctrl.milesTraveled.train | number : 0}}</span></h3>\n    </div>\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <h3 class=\"center-header\">Total emissions from your travel </h3>\n      <h3><span style=\"color: crimson\">{{$ctrl.soloEmissions | number : 0}} </span>Pounds CO2</h3>\n    </div>\n  </md-card>\n  <md-card class=\"inset-background\" layout=\"column\" layout-align=\"start center\">\n    <h3 class=\"center-header\">Welcome <span class=\"welcome-text\">{{$ctrl.user.username}}</span></h3>\n    <md-input-container style=\"margin-top: 0px;\">\n      <md-select ng-model=\"tripId\" placeholder=\"Select A Trip to View Details\" ng-change=\"$ctrl.showDetails(tripId)\">\n        <md-option ng-value=\"trip._id\" ng-repeat=\"trip in $ctrl.trips\">Trip to {{trip.name}} on {{trip.startDate | date: 'shortDate'}}</md-option>\n      </md-select>\n    </md-input-container>\n\n  </md-card>\n  <md-card class=\"inset-background\" layout=\"column\" layout-align=\"start center\">\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <h3 class=\"center-header\">Total Company Miles</h3>\n      <h3>By Air: <span class=\"aggregate-text\">{{$ctrl.companyMiles.air | number : 0}}</span></h3>\n      <h3>By Car: <span class=\"aggregate-text\">{{$ctrl.companyMiles.car | number : 0}}</span></h3>\n      <h3>By Bus: <span class=\"aggregate-text\">{{$ctrl.companyMiles.bus | number : 0}}</span></h3>\n      <h3>By Train: <span class=\"aggregate-text\">{{$ctrl.companyMiles.train | number : 0}}</span></h3>\n    </div>\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <h3 class=\"center-header\">Total company emissions from travel</h3>\n      <h3><span style=\"color: crimson\">{{$ctrl.companyEmissions | number : 0}} </span>Pounds CO2</h3>\n    </div>\n  </md-card>\n</md-card>\n\n<ui-view></ui-view>\n";
+
+/***/ },
 /* 31 */
 /***/ function(module, exports) {
 
-	module.exports = "<md-card ng-if=\"$ctrl.unconfirmed.length > 0\" class=\"card-background\" layout=\"column\" layout-align=\"space-around center\">\n  <h3 class=\"center-header\" style=\"color: crimson;\"><b>You've been added as a trip companion!</b></h3>\n  <span style=\"font-size: 1.25em; text-align: center; line-height: 1.5; margin-bottom: 20px;\">Looks like you've been added as a travel companion by one of your fellow employees. Those trips are listed below. Check the box to confirm that you were a part of this trip and then click the button to add the trip. It will automatically be added to your trips, so there's no need to add it separately.</span>\n  <div ng-repeat=\"unconfirmed in $ctrl.unconfirmed track by $index\">\n    <div layout=\"row\" layout-align=\"center center\">\n      <h3 style=\"margin-bottom: 16px; margin-right: 10px; text-decoration: underline;\">\n        Trip to {{unconfirmed.name}} \n        from {{unconfirmed.startDate | date: 'shortDate'}} \n        to {{unconfirmed.endDate | date: 'shortDate'}}\n      </h3>\n      <md-checkbox ng-model=\"$ctrl.confirmed[$index]\" aria-label=\"Were you part of this trip?\"></md-checkbox>\n    </div>        \n  </div>\n  <md-button class=\"md-raised md-accent\" ng-click=\"$ctrl.addConfirmations()\">Add Selected Trips</md-button>\n</md-card>\n\n<md-card class=\"card-background\" layout=\"row\" layout-align=\"center stretch\">\n    \n  <md-card class=\"inset-background\" layout=\"column\" layout-align=\"start center\">\n    <h3 ng-if=\"$ctrl.showMessage\" class=\"fade\">{{$ctrl.successMessage}}</h3>\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <h3 class=\"center-header\">Total miles you've traveled</h3>\n      <h3>By Air: <span style=\"color: crimson\">{{$ctrl.milesTraveled.air | number : 0}}</span></h3>\n      <h3>By Car: <span style=\"color: crimson\">{{$ctrl.milesTraveled.car | number : 0}}</span></h3>\n      <h3>By Bus: <span style=\"color: crimson\">{{$ctrl.milesTraveled.bus | number : 0}}</span></h3>\n      <h3>By Train: <span style=\"color: crimson\">{{$ctrl.milesTraveled.train | number : 0}}</span></h3>\n    </div>\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <h3 class=\"center-header\">Total emissions from your travel </h3>\n      <h3><span style=\"color: crimson\">{{$ctrl.soloEmissions | number : 0}} </span>Pounds CO2</h3>\n    </div>\n  </md-card>\n  <md-card class=\"inset-background\" layout=\"column\" layout-align=\"start center\">\n    <h3 class=\"center-header\">Welcome <span style=\"color: crimson;\">{{$ctrl.user.username}}</span></h3>\n    <md-input-container style=\"margin-top: 0px;\">\n      <md-select ng-model=\"tripId\" placeholder=\"Select A Trip to View Details\" ng-change=\"$ctrl.showDetails(tripId)\">\n        <md-option ng-value=\"trip._id\" ng-repeat=\"trip in $ctrl.trips\">Trip to {{trip.name}} on {{trip.startDate | date: 'shortDate'}}</md-option>\n      </md-select>\n    </md-input-container>\n\n  </md-card>\n  <md-card class=\"inset-background\" layout=\"column\" layout-align=\"start center\">\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <h3 class=\"center-header\">Total Company Miles</h3>\n      <h3>By Air: <span style=\"color: crimson\">{{$ctrl.companyTotals.air | number : 0}}</span></h3>\n      <h3>By Car: <span style=\"color: crimson\">{{$ctrl.companyTotals.car | number : 0}}</span></h3>\n      <h3>By Bus: <span style=\"color: crimson\">{{$ctrl.companyTotals.bus | number : 0}}</span></h3>\n      <h3>By Train: <span style=\"color: crimson\">{{$ctrl.companyTotals.train | number : 0}}</span></h3>\n    </div>\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <h3 class=\"center-header\">Total company emissions from travel</h3>\n      <h3><span style=\"color: crimson\">{{$ctrl.companyEmissions | number : 0}} </span>Pounds CO2</h3>\n    </div>\n  </md-card>\n</md-card>\n\n<ui-view></ui-view>\n";
+	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 32 */
+/* 32 */,
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -41915,7 +41945,7 @@
 	  value: true
 	});
 	
-	var _destinationMovements = __webpack_require__(33);
+	var _destinationMovements = __webpack_require__(34);
 	
 	var _destinationMovements2 = _interopRequireDefault(_destinationMovements);
 	
@@ -42035,13 +42065,13 @@
 	}
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports) {
 
 	module.exports = "<md-card class=\"card-background\" layout=\"column\" layout-align=\"space-around center\">\n\n  <h3 class=\"center-header\" style=\"line-height: 1.5; margin-left: 20px; margin-right: 20px;\"><b>FINAL STEP:</b> Did you travel once you got to your destination?</h3>\n\n  <md-radio-group ng-model=\"$ctrl.selectSubmission\">\n    <md-radio-button \n          style=\"font-size: 1.25em;\"\n          ng-repeat=\"each in $ctrl.options\" \n          ng-value=\"each.option\" \n          aria-label=\"{{each.text}}\">\n          {{each.text}}\n        </md-radio-button>\n  </md-radio-group>\n\n  <md-button ng-if=\"$ctrl.selectSubmission === 'none'\" \n           class=\"md-raised md-accent\" \n           ng-click=\"$ctrl.addTotalTrip()\" \n           style=\"margin: 0 auto; margin-bottom: 10px;\"\n           ng-disabled=\"$ctrl.disabled\">Submit Trip</md-button>\n\n  <div layout=\"row\" layout-sm=\"column\" layout-align=\"space-around\" ng-if=\"$ctrl.disabled\">\n    <md-progress-circular md-mode=\"indeterminate\"></md-progress-circular>\n  </div>\n</md-card>\n\n<md-card class=\"card-background\" layout=\"column\" layout-align=\"space-around center\">\n\n  <div ng-if=\"$ctrl.selectSubmission === 'estimate'\">\n    <h3 class=\"center-header\">Select all modes of transportation used at destination:</h3>\n\n    <div layout=\"row\" layout-align=\"center center\">\n      \n      <h3 class=\"checkbox-text\">Car:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.car\" aria-label=\"Car\">\n      </md-checkbox>\n      <h3 class=\"checkbox-text\">Bus:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.bus\" aria-label=\"Bus\">\n      </md-checkbox>\n      <h3 class=\"checkbox-text\">Train:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.train\" aria-label=\"Train\">\n      </md-checkbox>\n\n    </div>\n\n    <form name=\"miles\" ng-submit=\"miles.$valid && $ctrl.addTotalTrip()\" layout=\"column\" layout-align=\"space-around center\">\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.car\">\n        <h3 class=\"checkbox-text\">Estimated Miles by Car:</h3>\n        <md-input-container >\n          <input name=\"car\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.destMovements.car.distance\">\n        </md-input-container>\n      </div>\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.bus\">\n        <h3 class=\"checkbox-text\">Estimated Miles by Bus:</h3>\n        <md-input-container>\n            <input name=\"bus\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.destMovements.bus.distance\">\n        </md-input-container>\n      </div>\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.train\">\n        <h3 class=\"checkbox-text\">Estimated Miles by Train:</h3>\n        <md-input-container>\n          <input name=\"train\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.destMovements.train.distance\">\n        </md-input-container>\n      </div>\n      <md-button type=\"submit\" \n                 class=\"md-raised md-accent\" \n                 style=\"margin: 0 auto; margin-bottom: 10px;\"\n                 ng-disabled=\"$ctrl.disabled\">Submit Trip</md-button>\n    </form>\n    <div layout=\"row\" layout-sm=\"column\" layout-align=\"space-around\" ng-if=\"$ctrl.disabled\">\n      <md-progress-circular md-mode=\"indeterminate\"></md-progress-circular>\n    </div>\n  </div>\n\n  <form name=\"tripLeg\" ng-if=\"$ctrl.selectSubmission === 'individual'\" ng-submit=\"tripLeg.$valid && $ctrl.addTotalTrip()\" layout=\"column\" layout-align=\"space-around center\" style=\"margin-top: 15px;\">\n    <md-button ng-if=\"!$ctrl.roundTrip\" ng-click=\"$ctrl.addTripLeg()\" class=\"md-raised md-accent\">Add Trip Leg</md-button>\n    <div ng-repeat=\"trip in $ctrl.trips track by $index\" class=\"flex-container-row flex-center\">\n      <div layout=\"row\" layout-align=\"space-around center\">\n        <md-input-container>\n          <input name=\"fromCity\" required placeholder=\"Departure City:\" type=\"text\" ng-model=\"trip.fromCity\">\n          <div ng-messages=\"tripLeg.fromCity.$error\" role=\"alert\">\n            <div ng-message=\"required\">A departure city is required.</div>\n          </div>\n        </md-input-container>\n\n        <md-input-container style=\"padding-bottom: 25px;\">\n          <md-select ng-model=\"trip.fromState\" placeholder=\"State\">\n            <md-option ng-value=\"state\" ng-repeat=\"state in $ctrl.states\">{{ state }}</md-option>\n          </md-select>\n        </md-input-container>\n      </div>\n\n      <div layout=\"row\" layout-align=\"space-around center\">\n        <md-input-container>\n          <input name=\"to\" required placeholder=\"Destination City:\" type=\"text\" ng-model=\"trip.toCity\">\n          <div ng-messages=\"tripLeg.toCity.$error\" role=\"alert\">\n            <div ng-message=\"required\">A destination city is required.</div>\n          </div>\n        </md-input-container>\n\n          <md-input-container style=\"padding-bottom: 25px;\">\n            <md-select ng-model=\"trip.toState\" placeholder=\"State\">\n              <md-option ng-value=\"state\" ng-repeat=\"state in $ctrl.states\">{{ state }}</md-option>\n            </md-select>\n          </md-input-container>\n        </div>\n      \n      <md-button ng-click=\"$ctrl.removeTripLeg(trip, $index)\" class=\"md-raised md-warn\">Remove Trip Leg</md-button>\n    </div>\n      <md-button ng-disabled=\"$ctrl.disabled\" type=\"submit\" class=\"md-raised md-accent\">Submit Trip</md-button>\n  </form>\n  <div layout=\"row\" layout-sm=\"column\" layout-align=\"space-around\" ng-if=\"$ctrl.disabled\">\n    <md-progress-circular md-mode=\"indeterminate\"></md-progress-circular>\n  </div>\n</md-card>\n";
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42050,7 +42080,7 @@
 	  value: true
 	});
 	
-	var _newGroundTrip = __webpack_require__(35);
+	var _newGroundTrip = __webpack_require__(36);
 	
 	var _newGroundTrip2 = _interopRequireDefault(_newGroundTrip);
 	
@@ -42171,13 +42201,13 @@
 	}
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports) {
 
 	module.exports = "<md-card class=\"card-background flex-container-column\">\n\n  <h3 class=\"center-header\" style=\"line-height: 1.5; margin-left: 20px; margin-right: 20px;\"><b>STEP 5:</b> How would you like to record your ground mileage?</h3>\n\n  <md-radio-group ng-model=\"$ctrl.selectSubmission\" layout=\"column\" layout-align=\"center center\">\n    <md-radio-button \n          style=\"font-size: 1.25em;\"\n          ng-repeat=\"each in $ctrl.options\" \n          ng-value=\"each.option\" \n          aria-label=\"{{each.text}}\">\n          {{each.text}}\n        </md-radio-button>\n  </md-radio-group>\n\n  <div ng-if=\"$ctrl.selectSubmission === 'individual'\">\n    <h3 class=\"center-header\">Select the mode of ground transportation used for your trip:</h3>\n    <md-radio-group ng-model=\"$ctrl.groundMode\" layout=\"row\" layout-align=\"center center\">\n      <md-radio-button ng-repeat=\"mode in $ctrl.groundOptions\" ng-value=\"mode.type\" aria-label=\"{{mode.display}}\">\n        {{mode.display}}\n      </md-radio-button>\n    </md-radio-group>\n  </div>\n\n</md-card>\n\n<md-card class=\"card-background\" ng-if=\"$ctrl.selectSubmission === 'individual'\">\n  <div>\n    <h3 style=\"text-align: center; margin-top: 20px; margin-bottom: 10px; margin-right: 20px; margin-left: 20px; line-height: 1.5;\" ><b>STEP 6:</b> Enter starting city and destination city for all trip legs.</h3>\n  </div>\n  <form name=\"tripLeg\" ng-submit=\"tripLeg.$valid && $ctrl.submitTotalTrip()\" layout=\"column\" layout-align=\"space-around center\" style=\"margin-top: 15px;\">\n    <md-button ng-if=\"!$ctrl.roundTrip\" ng-click=\"$ctrl.addTripLeg()\" class=\"md-raised md-accent\">Add Trip Leg</md-button>\n    <div ng-repeat=\"trip in $ctrl.trips track by $index\" class=\"flex-container-row flex-center\">\n      <div layout=\"row\" layout-align=\"space-around center\">\n        <md-input-container>\n          <input name=\"fromCity\" required placeholder=\"Departure City:\" type=\"text\" ng-model=\"trip.fromCity\">\n          <div ng-messages=\"tripLeg.fromCity.$error\" role=\"alert\">\n            <div ng-message=\"required\">A departure city is required.</div>\n          </div>\n        </md-input-container>\n\n        <md-input-container style=\"padding-bottom: 25px;\">\n          <md-select ng-model=\"trip.fromState\" placeholder=\"State\">\n            <md-option ng-value=\"state\" ng-repeat=\"state in $ctrl.states\">{{ state }}</md-option>\n          </md-select>\n        </md-input-container>\n      </div>\n\n      <div layout=\"row\" layout-align=\"space-around center\">\n        <md-input-container>\n          <input name=\"to\" required placeholder=\"Destination City:\" type=\"text\" ng-model=\"trip.toCity\">\n          <div ng-messages=\"tripLeg.toCity.$error\" role=\"alert\">\n            <div ng-message=\"required\">A destination city is required.</div>\n          </div>\n        </md-input-container>\n\n          <md-input-container style=\"padding-bottom: 25px;\">\n            <md-select ng-model=\"trip.toState\" placeholder=\"State\">\n              <md-option ng-value=\"state\" ng-repeat=\"state in $ctrl.states\">{{ state }}</md-option>\n            </md-select>\n          </md-input-container>\n        </div>\n      \n      <md-button ng-click=\"$ctrl.removeTripLeg(trip, $index)\" class=\"md-raised md-warn\">Remove Trip Leg</md-button>\n    </div>\n\n      <md-button ng-disabled=\"$ctrl.disabled\" type=\"submit\" class=\"md-raised md-accent\">Submit Ground Trip</md-button>\n    \n  </form>\n\n  <div layout=\"row\" layout-sm=\"column\" layout-align=\"space-around\" ng-if=\"$ctrl.disabled\">\n      <md-progress-circular md-mode=\"indeterminate\"></md-progress-circular>\n  </div>\n</md-card>\n\n<md-card class=\"card-background\" ng-if=\"$ctrl.selectSubmission === 'estimate'\" layout=\"column\" layout-align=\"space-around center\">\n  <h3 class=\"center-header\">Select all modes of transportation used during your trip:</h3>\n\n    <div layout=\"row\" layout-align=\"center center\">\n      \n      <h3 class=\"checkbox-text\">Car:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.car\" aria-label=\"Car\">\n      </md-checkbox>\n      <h3 class=\"checkbox-text\">Bus:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.bus\" aria-label=\"Bus\">\n      </md-checkbox>\n      <h3 class=\"checkbox-text\">Train:</h3><md-checkbox flex-gt-sm=\"20\" ng-model=\"$ctrl.train\" aria-label=\"Train\">\n      </md-checkbox>\n\n    </div>\n\n  <form name=\"estimateTrip\" ng-submit=\"estimateTrip.$valid && $ctrl.submitTotalTrip()\" layout=\"column\" layout-align=\"space-around center\" style=\"margin-top: 15px;\">\n    <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.car\">\n        <h3 class=\"checkbox-text\">Estimated Miles by Car:</h3>\n        <md-input-container >\n          <input name=\"car\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.groundTrips.car.distance\">\n        </md-input-container>\n      </div>\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.bus\">\n        <h3 class=\"checkbox-text\">Estimated Miles by Bus:</h3>\n        <md-input-container>\n            <input name=\"bus\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.groundTrips.bus.distance\">\n        </md-input-container>\n      </div>\n      <div layout=\"row\" layout-align=\"center center\" ng-if=\"$ctrl.train\">\n        <h3 class=\"checkbox-text\">Estimated Miles by Train:</h3>\n        <md-input-container>\n          <input name=\"train\" required placeholder=\"Enter Miles\" type=\"text\" ng-model=\"$ctrl.groundTrips.train.distance\">\n        </md-input-container>\n      </div>\n      <md-button type=\"submit\" \n                 class=\"md-raised md-accent\" \n                 style=\"margin: 0 auto; margin-bottom: 10px;\"\n                 ng-disabled=\"$ctrl.disabled\">Submit Trip</md-button>\n  </form>\n    <div layout=\"row\" layout-sm=\"column\" layout-align=\"space-around\" ng-if=\"$ctrl.disabled\">\n      <md-progress-circular md-mode=\"indeterminate\"></md-progress-circular>\n  </div>\n</md-card>";
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42186,7 +42216,7 @@
 	  value: true
 	});
 	
-	var _newRoundTrip = __webpack_require__(37);
+	var _newRoundTrip = __webpack_require__(38);
 	
 	var _newRoundTrip2 = _interopRequireDefault(_newRoundTrip);
 	
@@ -42283,13 +42313,13 @@
 	};
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports) {
 
 	module.exports = "<md-card class=\"card-background\">\n  <div layout=\"row\" layout-align=\"center center\">\n    <h3 style=\"margin-top: 20px; margin-bottom: 10px;\"><b>STEP 5:</b><span style=\"color: crimson;\"><i> Add all flights for this trip, including return flights:</i></span></h3>\n    <md-button ng-click=\"$ctrl.addNewFlight()\" class=\"md-raised md-accent\">Add Another Flight</md-button>\n  </div>\n  <div layout=\"column\" layout-align=\"space-around center\">\n\n    <md-content \n      class=\"md-padding card-background\" \n      ng-repeat=\"new in $ctrl.newFlights track by $index\" \n      layout=\"row\" \n      layout-align-gt-sm=\"center center\"\n      layout-margin>\n        <form ng-submit=\"$event.preventDefault()\">\n          <md-autocomplete\n              md-select-on-match\n              md-selected-item=\"new.from\"\n              md-search-text=\"new.searchFrom\"\n              md-items=\"item in $ctrl.querySearch(new.searchFrom)\"\n              md-item-text=\"item.display\"\n              md-min-length=\"0\"\n              md-require-match=\"true\"\n              placeholder=\"Departure Airport/City\">\n            <md-item-template>\n              <span md-highlight-text=\"new.searchFrom\" md-highlight-flags=\"^i\">{{item.display}}</span>\n            </md-item-template>\n          </md-autocomplete>\n          <br/>\n        </form>\n\n        <form ng-submit=\"$event.preventDefault()\">\n          <md-autocomplete\n              md-select-on-match\n              md-selected-item=\"new.to\"\n              md-search-text=\"new.searchTo\"\n              md-items=\"item in $ctrl.querySearch(new.searchTo)\"\n              md-item-text=\"item.display\"\n              md-min-length=\"0\"\n              placeholder=\"Destination Airport/City\">\n            <md-item-template>\n              <span md-highlight-text=\"new.searchTo\" md-highlight-flags=\"^i\">{{item.display}}</span>\n            </md-item-template>\n          </md-autocomplete>\n          <br/>\n        </form>\n        <md-button class=\"md-raised md-warn\" style=\"margin-bottom: 22px;\" ng-click=\"$ctrl.removeFlight(new, $index)\">Remove Flight</md-button>\n    \n    </md-content>\n    \n    <md-button ng-disabled=\"$ctrl.disabled\" ng-click=\"$ctrl.submitFlights()\" class=\"md-raised md-accent\">Submit Flights</md-button>\n\n  </div>\n  <div layout=\"row\" layout-sm=\"column\" layout-align=\"space-around\" ng-if=\"$ctrl.disabled\">\n    <md-progress-circular md-mode=\"indeterminate\"></md-progress-circular>\n  </div>\n</md-card>\n";
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42298,11 +42328,11 @@
 	  value: true
 	});
 	
-	var _newTrip = __webpack_require__(39);
+	var _newTrip = __webpack_require__(40);
 	
 	var _newTrip2 = _interopRequireDefault(_newTrip);
 	
-	var _newTrip3 = __webpack_require__(40);
+	var _newTrip3 = __webpack_require__(41);
 	
 	var _newTrip4 = _interopRequireDefault(_newTrip3);
 	
@@ -42379,20 +42409,20 @@
 	}
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports) {
 
 	module.exports = "<md-content layout-padding>\n  <div ng-class=\"$ctrl.styles.new\">\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\" style=\"margin-top: 20px\">\n        <b>STEP 1:</b> Select your departure and return dates: \n      </h3>\n      <div layout-gt-xs=\"row\" layout-align-gt-xs=\"center center\">\n          <h4 style=\"margin-bottom: 10px;\">\n            Departure Date: \n          </h4>\n          <md-datepicker \n            ng-model=\"$ctrl.totalTrip.startDate\" \n            md-placeholder=\"Departure Date\">\n          </md-datepicker>\n          <h4 style=\"margin-bottom: 10px; margin-left: 25px;\">\n            Return Date: \n          </h4>\n          <md-datepicker \n            ng-model=\"$ctrl.totalTrip.endDate\" \n            md-placeholder=\"Return Date\">\n          </md-datepicker>\n      </div>\n    </md-card>\n\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\" style=\"margin-top: 20px\">\n        <b>STEP 2:</b> Where did you go? This will be used to \"name\" your trip for record keeping.\n      </h3>\n      <div layout-gt-xs=\"row\" layout-align-gt-xs=\"center center\">\n          <form name=\"tripName\" layout=\"row\" layout-align=\"space-around center\" style=\"margin-top: 15px;\">\n            <md-input-container>\n              <input name=\"fromCity\" required placeholder=\"(e.g. <em>Portland, OR)</em>.\" type=\"text\" ng-model=\"$ctrl.totalTrip.name\" style=\"width: 300px; margin-bottom: 25px;\">\n              <div ng-messages=\"tripSummary.fromCity.$error\" role=\"alert\">\n                <div ng-message=\"required\">A trip description is required.</div>\n              </div>\n            </md-input-container>\n          </form>\n      </div>\n    </md-card>\n\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\" style=\"margin-top: 20px\">\n        <b>STEP 3:</b> Did you travel with other employees? \n      </h3>\n      <div ng-if=\"!$ctrl.added\" style=\"margin-top: 8px; margin-right: 0px;\" layout=\"row\" layout-align=\"center center\">\n        <span style=\"margin-right: 5px; margin-bottom: 5px; font-size: 1.25em;\">\n          If so, click this button to add your travel companions:\n        </span>\n        <md-button ng-click=\"$ctrl.toggleSideNav()\" class=\"md-raised md-accent\">Add Travelers</md-button>\n      </div>\n      <h4 ng-if=\"$ctrl.added\" style=\"text-align: center; margin-bottom: 10px;\">Travel Companions Added. Thank You!</h4> \n    </md-card>\n\n    <md-card class=\"card-background\">\n      <h3 class=\"center-header\">\n        <b>STEP 4:</b> Select the mode of transportation to your destination city:\n      </h3>\n      <md-radio-group ng-model=\"$ctrl.mode\" layout=\"row\" layout-align=\"center\">\n        <md-radio-button \n          ng-repeat=\"mode in $ctrl.options\" \n          ng-value=\"mode\" \n          aria-label=\"{{mode}}\">\n          {{mode}}\n        </md-radio-button>\n      </md-radio-group>\n    </md-card>\n\n    <new-ground-trip \n      ng-if=\"$ctrl.mode === 'Ground'\" \n      total-trip=\"$ctrl.totalTrip\"> \n    </new-ground-trip>\n    <new-round-trip \n      ng-if=\"$ctrl.mode === 'Air' && $ctrl.airports\" \n      airports=\"$ctrl.airports\" \n      total-trip=\"$ctrl.totalTrip\"> \n    </new-round-trip>\n    <md-divider></md-divider>\n  </div>\n</md-content>\n\n<md-sidenav class=\"md-sidenav-right\" md-component-id=\"addUsers\">\n\n  <md-toolbar class=\"md-theme-light\">\n    <h3 class=\"center-header\">Select Travel Companions</h3>\n    <md-divider></md-divider>\n    <p style=\"margin: 20px; text-align: center; font-size: 1.25em; font-weight: 400;\">If you don't see your fellow travelers, that means they haven't used this travel tracker app yet. You should remind them to sign up and start logging their trips!</p>\n  </md-toolbar>\n  <md-content layout=\"column\" layout-align=\"space-around center\">\n    <div ng-repeat=\"user in $ctrl.filteredUsers track by $index\" style=\"margin-top: 10px;\">\n      <span style=\"margin-right: 5px;\"><b>{{user.email}}</b></span><md-checkbox ng-model=\"$ctrl.userConfirmations[$index]\" aria-label=\"{{user.email}}\"></md-checkbox>\n    </div>\n    <div layout=\"column\" layout-align=\"space-around center\">\n      <md-button ng-click=\"$ctrl.addUsers()\" class=\"md-raised md-accent\">Add Selected Users</md-button>\n      <md-button ng-click=\"$ctrl.toggleSideNav()\" class=\"md-raised md-warn\">\n        Cancel\n      </md-button>\n    </div>\n  </md-content>\n\n</md-sidenav>\n";
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 41 */,
-/* 42 */
+/* 42 */,
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42401,7 +42431,61 @@
 	  value: true
 	});
 	
-	var _tripDetail = __webpack_require__(43);
+	var _reset = __webpack_require__(44);
+	
+	var _reset2 = _interopRequireDefault(_reset);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = {
+	  template: _reset2.default,
+	  bindings: {
+	    validRequest: '<'
+	  },
+	  controller: controller
+	};
+	
+	
+	controller.$inject = ['$state', 'userService'];
+	function controller($state, userService) {
+	  var _this = this;
+	
+	  this.reset = {
+	    email: '',
+	    newPass: ''
+	  };
+	  this.$onInit = function () {
+	    if (_this.validRequest.success) {
+	      _this.canReset = true;
+	    }
+	  };
+	
+	  this.resetPassword = function () {
+	    userService.resetPassword(_this.reset).then(function () {
+	      $state.go('dashboard');
+	    }).catch(function (err) {
+	      return console.log(err);
+	    });
+	  };
+	}
+
+/***/ },
+/* 44 */
+/***/ function(module, exports) {
+
+	module.exports = "<md-card class=\"card-background\">\n  <h3 class=\"center-header\">Password Reset</h3>\n  <div ng-if=\"$ctrl.validRequest.success\">\n    <h4 class=\"center-header\">\n      Please enter your email address and your new password below\n    </h4>\n    <div layout-gt-xs=\"row\" layout-align-gt-xs=\"center center\">\n      <form name=\"resetForm\" layout=\"row\" layout-align=\"space-around center\" style=\"margin-top: 15px;\">\n        <md-input-container>\n          <input name=\"email\" required placeholder=\"Email Address\" type=\"text\" ng-model=\"$ctrl.reset.email\" style=\"width: 300px; margin-bottom: 25px;\">\n          <div ng-messages=\"resetForm.email.$error\" role=\"alert\">\n            <div ng-message=\"required\">Email address is required.</div>\n          </div>\n        </md-input-container>\n        <md-input-container>\n          <input name=\"newPass\" required placeholder=\"New Password\" type=\"text\" ng-model=\"$ctrl.reset.newPass\" style=\"width: 300px; margin-bottom: 25px;\">\n          <div ng-messages=\"resetForm.newPass.$error\" role=\"alert\">\n            <div ng-message=\"required\">A new password is required.</div>\n          </div>\n        </md-input-container>\n        <md-button ng-click=\"$ctrl.resetPassword()\" class=\"md-raised md-accent\">Reset Password</md-button>\n      </form>\n    </div>\n  </div>\n\n  <div ng-if=\"!$ctrl.validRequest.success\">\n    <p>{{$ctrl.validRequest.message}}</p>\n  </div>\n</md-card>\n";
+
+/***/ },
+/* 45 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _tripDetail = __webpack_require__(46);
 	
 	var _tripDetail2 = _interopRequireDefault(_tripDetail);
 	
@@ -42430,20 +42514,20 @@
 	
 	  this.getModeMiles = function () {
 	    _this.modeMiles = _this.trip.movements.reduce(function (accumulator, movement) {
-	      accumulator[movement.mode] += movement.distance;
+	      accumulator[movement.mode] += Math.round(movement.distance);
 	      return accumulator;
 	    }, { air: 0, car: 0, bus: 0, train: 0 });
 	  };
 	};
 
 /***/ },
-/* 43 */
+/* 46 */
 /***/ function(module, exports) {
 
 	module.exports = "<md-card class=\"card-background\">\n  <h3 class=\"center-header\">Trip to {{$ctrl.trip.name}} from {{$ctrl.trip.startDate | date: 'shortDate'}} to {{$ctrl.trip.endDate | date: 'shortDate'}}</h3>\n  <div layout=\"row\" layout-align=\"center center\">\n    <h3 class=\"mid-header\">Trip Total Mileage: <span style=\"color: crimson; margin-right: 10px;\">{{ $ctrl.trip.totalMiles | number: 0}}</span></h3>\n    <h3 class=\"mid-header\">| Emissions (Pounds CO2): <span style=\"color: crimson;\">{{$ctrl.emissions.total | number: 0}}</span></h3>\n  </div>\n  <div layout=\"column\" layout-align=\"space-around center\">\n    <div class=\"canvasContain\">\n      <canvas id=\"bar\"></canvas>\n    </div>\n  </div>\n</md-card>";
 
 /***/ },
-/* 44 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42452,7 +42536,7 @@
 	  value: true
 	});
 	
-	var _welcome = __webpack_require__(45);
+	var _welcome = __webpack_require__(48);
 	
 	var _welcome2 = _interopRequireDefault(_welcome);
 	
@@ -42475,13 +42559,13 @@
 	}
 
 /***/ },
-/* 45 */
+/* 48 */
 /***/ function(module, exports) {
 
 	module.exports = "<div ng-if=\"!$ctrl.user\"layout=\"column\" layout-align=\"space-around center\">\n  <h2 class=\"center-header\"><b>Welcome to the EE Travel Tracker</b></h2>\n  <p style=\"font-size: 1.45em; line-height: 1.5; text-align: center; font-weight: 500;\">Log in to enter mileage information about your EE business trips. You can view all of your trips at the dashboard, as well as up-to-date information about your travel mileage and travel mileage across the company.  Associated CO2 emissions information is tracked as well and can be viewed at the dashboard.</p>\n</div>\n\n<div ng-if=\"$ctrl.user\"layout=\"column\" layout-align=\"space-around center\">\n  <h2 class=\"center-header\"><b>Welcome back {{$ctrl.user.username}}!</b></h2>\n  <p style=\"font-size: 1.45em; line-height: 1.5; text-align: center; font-weight: 500;\">Click 'Enter Site' above to head over to your dashboard, and add any new trips since your last visit.</p>\n</div>  ";
 
 /***/ },
-/* 46 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42504,7 +42588,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var reqContext = __webpack_require__(47);
+	var reqContext = __webpack_require__(50);
 	
 	var services = _angular2.default.module('services', []);
 	
@@ -42516,16 +42600,16 @@
 	exports.default = services.name;
 
 /***/ },
-/* 47 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./chart-service.js": 48,
-		"./distance-service.js": 205,
-		"./flight-service.js": 206,
-		"./token-service.js": 207,
-		"./trip-service.js": 208,
-		"./user-service.js": 209
+		"./chart-service.js": 51,
+		"./distance-service.js": 208,
+		"./flight-service.js": 209,
+		"./token-service.js": 210,
+		"./trip-service.js": 211,
+		"./user-service.js": 212
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -42538,11 +42622,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 47;
+	webpackContext.id = 50;
 
 
 /***/ },
-/* 48 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -42552,7 +42636,7 @@
 	});
 	exports.default = chartService;
 	
-	var _chart = __webpack_require__(49);
+	var _chart = __webpack_require__(52);
 	
 	var _chart2 = _interopRequireDefault(_chart);
 	
@@ -42674,18 +42758,15 @@
 	}
 
 /***/ },
-/* 49 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
 	 * @namespace Chart
 	 */
-	var Chart = __webpack_require__(50)();
+	var Chart = __webpack_require__(53)();
 	
-	__webpack_require__(51)(Chart);
-	__webpack_require__(57)(Chart);
-	__webpack_require__(58)(Chart);
-	__webpack_require__(59)(Chart);
+	__webpack_require__(54)(Chart);
 	__webpack_require__(60)(Chart);
 	__webpack_require__(61)(Chart);
 	__webpack_require__(62)(Chart);
@@ -42697,41 +42778,44 @@
 	__webpack_require__(68)(Chart);
 	__webpack_require__(69)(Chart);
 	__webpack_require__(70)(Chart);
-	
 	__webpack_require__(71)(Chart);
 	__webpack_require__(72)(Chart);
 	__webpack_require__(73)(Chart);
-	__webpack_require__(74)(Chart);
 	
+	__webpack_require__(74)(Chart);
 	__webpack_require__(75)(Chart);
 	__webpack_require__(76)(Chart);
 	__webpack_require__(77)(Chart);
+	
 	__webpack_require__(78)(Chart);
 	__webpack_require__(79)(Chart);
 	__webpack_require__(80)(Chart);
+	__webpack_require__(81)(Chart);
+	__webpack_require__(82)(Chart);
+	__webpack_require__(83)(Chart);
 	
 	// Controllers must be loaded after elements
 	// See Chart.core.datasetController.dataElementType
-	__webpack_require__(192)(Chart);
-	__webpack_require__(193)(Chart);
-	__webpack_require__(194)(Chart);
 	__webpack_require__(195)(Chart);
 	__webpack_require__(196)(Chart);
 	__webpack_require__(197)(Chart);
-	
 	__webpack_require__(198)(Chart);
 	__webpack_require__(199)(Chart);
 	__webpack_require__(200)(Chart);
+	
 	__webpack_require__(201)(Chart);
 	__webpack_require__(202)(Chart);
 	__webpack_require__(203)(Chart);
 	__webpack_require__(204)(Chart);
+	__webpack_require__(205)(Chart);
+	__webpack_require__(206)(Chart);
+	__webpack_require__(207)(Chart);
 	
 	window.Chart = module.exports = Chart;
 
 
 /***/ },
-/* 50 */
+/* 53 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -42793,14 +42877,14 @@
 
 
 /***/ },
-/* 51 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* global window: false */
 	/* global document: false */
 	'use strict';
 	
-	var color = __webpack_require__(52);
+	var color = __webpack_require__(55);
 	
 	module.exports = function(Chart) {
 		// Global Chart helpers object for utility methods and classes
@@ -43855,12 +43939,12 @@
 
 
 /***/ },
-/* 52 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* MIT license */
-	var convert = __webpack_require__(53);
-	var string = __webpack_require__(55);
+	var convert = __webpack_require__(56);
+	var string = __webpack_require__(58);
 	
 	var Color = function (obj) {
 		if (obj instanceof Color) {
@@ -44344,10 +44428,10 @@
 
 
 /***/ },
-/* 53 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var conversions = __webpack_require__(54);
+	var conversions = __webpack_require__(57);
 	
 	var convert = function() {
 	   return new Converter();
@@ -44441,7 +44525,7 @@
 	module.exports = convert;
 
 /***/ },
-/* 54 */
+/* 57 */
 /***/ function(module, exports) {
 
 	/* MIT license */
@@ -45145,11 +45229,11 @@
 
 
 /***/ },
-/* 55 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* MIT license */
-	var colorNames = __webpack_require__(56);
+	var colorNames = __webpack_require__(59);
 	
 	module.exports = {
 	   getRgba: getRgba,
@@ -45372,7 +45456,7 @@
 
 
 /***/ },
-/* 56 */
+/* 59 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -45527,7 +45611,7 @@
 	};
 
 /***/ },
-/* 57 */
+/* 60 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -45637,7 +45721,7 @@
 
 
 /***/ },
-/* 58 */
+/* 61 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -45739,7 +45823,7 @@
 
 
 /***/ },
-/* 59 */
+/* 62 */
 /***/ function(module, exports) {
 
 	/* global window: false */
@@ -45884,7 +45968,7 @@
 
 
 /***/ },
-/* 60 */
+/* 63 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -46693,7 +46777,7 @@
 
 
 /***/ },
-/* 61 */
+/* 64 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47008,7 +47092,7 @@
 
 
 /***/ },
-/* 62 */
+/* 65 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47353,7 +47437,7 @@
 
 
 /***/ },
-/* 63 */
+/* 66 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47399,7 +47483,7 @@
 
 
 /***/ },
-/* 64 */
+/* 67 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47534,7 +47618,7 @@
 
 
 /***/ },
-/* 65 */
+/* 68 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -47742,7 +47826,7 @@
 
 
 /***/ },
-/* 66 */
+/* 69 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -48499,7 +48583,7 @@
 
 
 /***/ },
-/* 67 */
+/* 70 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -48712,7 +48796,7 @@
 
 
 /***/ },
-/* 68 */
+/* 71 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -49217,7 +49301,7 @@
 
 
 /***/ },
-/* 69 */
+/* 72 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -49518,7 +49602,7 @@
 
 
 /***/ },
-/* 70 */
+/* 73 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50401,7 +50485,7 @@
 
 
 /***/ },
-/* 71 */
+/* 74 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50511,7 +50595,7 @@
 
 
 /***/ },
-/* 72 */
+/* 75 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50701,7 +50785,7 @@
 
 
 /***/ },
-/* 73 */
+/* 76 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50785,7 +50869,7 @@
 
 
 /***/ },
-/* 74 */
+/* 77 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -50967,7 +51051,7 @@
 
 
 /***/ },
-/* 75 */
+/* 78 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51071,7 +51155,7 @@
 
 
 /***/ },
-/* 76 */
+/* 79 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51206,7 +51290,7 @@
 
 
 /***/ },
-/* 77 */
+/* 80 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51380,7 +51464,7 @@
 
 
 /***/ },
-/* 78 */
+/* 81 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -51612,7 +51696,7 @@
 
 
 /***/ },
-/* 79 */
+/* 82 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -52034,13 +52118,13 @@
 
 
 /***/ },
-/* 80 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* global window: false */
 	'use strict';
 	
-	var moment = __webpack_require__(81);
+	var moment = __webpack_require__(84);
 	moment = typeof(moment) === 'function' ? moment : window.moment;
 	
 	module.exports = function(Chart) {
@@ -52500,7 +52584,7 @@
 
 
 /***/ },
-/* 81 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(module) {//! moment.js
@@ -54317,7 +54401,7 @@
 	            module && module.exports) {
 	        try {
 	            oldLocale = globalLocale._abbr;
-	            __webpack_require__(83)("./" + name);
+	            __webpack_require__(86)("./" + name);
 	            // because defineLocale currently also sets the global locale, we
 	            // want to undo that for lazy loaded locales
 	            getSetGlobalLocale(oldLocale);
@@ -56805,10 +56889,10 @@
 	
 	})));
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(82)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(85)(module)))
 
 /***/ },
-/* 82 */
+/* 85 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -56824,226 +56908,226 @@
 
 
 /***/ },
-/* 83 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var map = {
-		"./af": 84,
-		"./af.js": 84,
-		"./ar": 85,
-		"./ar-dz": 86,
-		"./ar-dz.js": 86,
-		"./ar-ly": 87,
-		"./ar-ly.js": 87,
-		"./ar-ma": 88,
-		"./ar-ma.js": 88,
-		"./ar-sa": 89,
-		"./ar-sa.js": 89,
-		"./ar-tn": 90,
-		"./ar-tn.js": 90,
-		"./ar.js": 85,
-		"./az": 91,
-		"./az.js": 91,
-		"./be": 92,
-		"./be.js": 92,
-		"./bg": 93,
-		"./bg.js": 93,
-		"./bn": 94,
-		"./bn.js": 94,
-		"./bo": 95,
-		"./bo.js": 95,
-		"./br": 96,
-		"./br.js": 96,
-		"./bs": 97,
-		"./bs.js": 97,
-		"./ca": 98,
-		"./ca.js": 98,
-		"./cs": 99,
-		"./cs.js": 99,
-		"./cv": 100,
-		"./cv.js": 100,
-		"./cy": 101,
-		"./cy.js": 101,
-		"./da": 102,
-		"./da.js": 102,
-		"./de": 103,
-		"./de-at": 104,
-		"./de-at.js": 104,
-		"./de.js": 103,
-		"./dv": 105,
-		"./dv.js": 105,
-		"./el": 106,
-		"./el.js": 106,
-		"./en-au": 107,
-		"./en-au.js": 107,
-		"./en-ca": 108,
-		"./en-ca.js": 108,
-		"./en-gb": 109,
-		"./en-gb.js": 109,
-		"./en-ie": 110,
-		"./en-ie.js": 110,
-		"./en-nz": 111,
-		"./en-nz.js": 111,
-		"./eo": 112,
-		"./eo.js": 112,
-		"./es": 113,
-		"./es-do": 114,
-		"./es-do.js": 114,
-		"./es.js": 113,
-		"./et": 115,
-		"./et.js": 115,
-		"./eu": 116,
-		"./eu.js": 116,
-		"./fa": 117,
-		"./fa.js": 117,
-		"./fi": 118,
-		"./fi.js": 118,
-		"./fo": 119,
-		"./fo.js": 119,
-		"./fr": 120,
-		"./fr-ca": 121,
-		"./fr-ca.js": 121,
-		"./fr-ch": 122,
-		"./fr-ch.js": 122,
-		"./fr.js": 120,
-		"./fy": 123,
-		"./fy.js": 123,
-		"./gd": 124,
-		"./gd.js": 124,
-		"./gl": 125,
-		"./gl.js": 125,
-		"./he": 126,
-		"./he.js": 126,
-		"./hi": 127,
-		"./hi.js": 127,
-		"./hr": 128,
-		"./hr.js": 128,
-		"./hu": 129,
-		"./hu.js": 129,
-		"./hy-am": 130,
-		"./hy-am.js": 130,
-		"./id": 131,
-		"./id.js": 131,
-		"./is": 132,
-		"./is.js": 132,
-		"./it": 133,
-		"./it.js": 133,
-		"./ja": 134,
-		"./ja.js": 134,
-		"./jv": 135,
-		"./jv.js": 135,
-		"./ka": 136,
-		"./ka.js": 136,
-		"./kk": 137,
-		"./kk.js": 137,
-		"./km": 138,
-		"./km.js": 138,
-		"./ko": 139,
-		"./ko.js": 139,
-		"./ky": 140,
-		"./ky.js": 140,
-		"./lb": 141,
-		"./lb.js": 141,
-		"./lo": 142,
-		"./lo.js": 142,
-		"./lt": 143,
-		"./lt.js": 143,
-		"./lv": 144,
-		"./lv.js": 144,
-		"./me": 145,
-		"./me.js": 145,
-		"./mi": 146,
-		"./mi.js": 146,
-		"./mk": 147,
-		"./mk.js": 147,
-		"./ml": 148,
-		"./ml.js": 148,
-		"./mr": 149,
-		"./mr.js": 149,
-		"./ms": 150,
-		"./ms-my": 151,
-		"./ms-my.js": 151,
-		"./ms.js": 150,
-		"./my": 152,
-		"./my.js": 152,
-		"./nb": 153,
-		"./nb.js": 153,
-		"./ne": 154,
-		"./ne.js": 154,
-		"./nl": 155,
-		"./nl-be": 156,
-		"./nl-be.js": 156,
-		"./nl.js": 155,
-		"./nn": 157,
-		"./nn.js": 157,
-		"./pa-in": 158,
-		"./pa-in.js": 158,
-		"./pl": 159,
-		"./pl.js": 159,
-		"./pt": 160,
-		"./pt-br": 161,
-		"./pt-br.js": 161,
-		"./pt.js": 160,
-		"./ro": 162,
-		"./ro.js": 162,
-		"./ru": 163,
-		"./ru.js": 163,
-		"./se": 164,
-		"./se.js": 164,
-		"./si": 165,
-		"./si.js": 165,
-		"./sk": 166,
-		"./sk.js": 166,
-		"./sl": 167,
-		"./sl.js": 167,
-		"./sq": 168,
-		"./sq.js": 168,
-		"./sr": 169,
-		"./sr-cyrl": 170,
-		"./sr-cyrl.js": 170,
-		"./sr.js": 169,
-		"./ss": 171,
-		"./ss.js": 171,
-		"./sv": 172,
-		"./sv.js": 172,
-		"./sw": 173,
-		"./sw.js": 173,
-		"./ta": 174,
-		"./ta.js": 174,
-		"./te": 175,
-		"./te.js": 175,
-		"./tet": 176,
-		"./tet.js": 176,
-		"./th": 177,
-		"./th.js": 177,
-		"./tl-ph": 178,
-		"./tl-ph.js": 178,
-		"./tlh": 179,
-		"./tlh.js": 179,
-		"./tr": 180,
-		"./tr.js": 180,
-		"./tzl": 181,
-		"./tzl.js": 181,
-		"./tzm": 182,
-		"./tzm-latn": 183,
-		"./tzm-latn.js": 183,
-		"./tzm.js": 182,
-		"./uk": 184,
-		"./uk.js": 184,
-		"./uz": 185,
-		"./uz.js": 185,
-		"./vi": 186,
-		"./vi.js": 186,
-		"./x-pseudo": 187,
-		"./x-pseudo.js": 187,
-		"./yo": 188,
-		"./yo.js": 188,
-		"./zh-cn": 189,
-		"./zh-cn.js": 189,
-		"./zh-hk": 190,
-		"./zh-hk.js": 190,
-		"./zh-tw": 191,
-		"./zh-tw.js": 191
+		"./af": 87,
+		"./af.js": 87,
+		"./ar": 88,
+		"./ar-dz": 89,
+		"./ar-dz.js": 89,
+		"./ar-ly": 90,
+		"./ar-ly.js": 90,
+		"./ar-ma": 91,
+		"./ar-ma.js": 91,
+		"./ar-sa": 92,
+		"./ar-sa.js": 92,
+		"./ar-tn": 93,
+		"./ar-tn.js": 93,
+		"./ar.js": 88,
+		"./az": 94,
+		"./az.js": 94,
+		"./be": 95,
+		"./be.js": 95,
+		"./bg": 96,
+		"./bg.js": 96,
+		"./bn": 97,
+		"./bn.js": 97,
+		"./bo": 98,
+		"./bo.js": 98,
+		"./br": 99,
+		"./br.js": 99,
+		"./bs": 100,
+		"./bs.js": 100,
+		"./ca": 101,
+		"./ca.js": 101,
+		"./cs": 102,
+		"./cs.js": 102,
+		"./cv": 103,
+		"./cv.js": 103,
+		"./cy": 104,
+		"./cy.js": 104,
+		"./da": 105,
+		"./da.js": 105,
+		"./de": 106,
+		"./de-at": 107,
+		"./de-at.js": 107,
+		"./de.js": 106,
+		"./dv": 108,
+		"./dv.js": 108,
+		"./el": 109,
+		"./el.js": 109,
+		"./en-au": 110,
+		"./en-au.js": 110,
+		"./en-ca": 111,
+		"./en-ca.js": 111,
+		"./en-gb": 112,
+		"./en-gb.js": 112,
+		"./en-ie": 113,
+		"./en-ie.js": 113,
+		"./en-nz": 114,
+		"./en-nz.js": 114,
+		"./eo": 115,
+		"./eo.js": 115,
+		"./es": 116,
+		"./es-do": 117,
+		"./es-do.js": 117,
+		"./es.js": 116,
+		"./et": 118,
+		"./et.js": 118,
+		"./eu": 119,
+		"./eu.js": 119,
+		"./fa": 120,
+		"./fa.js": 120,
+		"./fi": 121,
+		"./fi.js": 121,
+		"./fo": 122,
+		"./fo.js": 122,
+		"./fr": 123,
+		"./fr-ca": 124,
+		"./fr-ca.js": 124,
+		"./fr-ch": 125,
+		"./fr-ch.js": 125,
+		"./fr.js": 123,
+		"./fy": 126,
+		"./fy.js": 126,
+		"./gd": 127,
+		"./gd.js": 127,
+		"./gl": 128,
+		"./gl.js": 128,
+		"./he": 129,
+		"./he.js": 129,
+		"./hi": 130,
+		"./hi.js": 130,
+		"./hr": 131,
+		"./hr.js": 131,
+		"./hu": 132,
+		"./hu.js": 132,
+		"./hy-am": 133,
+		"./hy-am.js": 133,
+		"./id": 134,
+		"./id.js": 134,
+		"./is": 135,
+		"./is.js": 135,
+		"./it": 136,
+		"./it.js": 136,
+		"./ja": 137,
+		"./ja.js": 137,
+		"./jv": 138,
+		"./jv.js": 138,
+		"./ka": 139,
+		"./ka.js": 139,
+		"./kk": 140,
+		"./kk.js": 140,
+		"./km": 141,
+		"./km.js": 141,
+		"./ko": 142,
+		"./ko.js": 142,
+		"./ky": 143,
+		"./ky.js": 143,
+		"./lb": 144,
+		"./lb.js": 144,
+		"./lo": 145,
+		"./lo.js": 145,
+		"./lt": 146,
+		"./lt.js": 146,
+		"./lv": 147,
+		"./lv.js": 147,
+		"./me": 148,
+		"./me.js": 148,
+		"./mi": 149,
+		"./mi.js": 149,
+		"./mk": 150,
+		"./mk.js": 150,
+		"./ml": 151,
+		"./ml.js": 151,
+		"./mr": 152,
+		"./mr.js": 152,
+		"./ms": 153,
+		"./ms-my": 154,
+		"./ms-my.js": 154,
+		"./ms.js": 153,
+		"./my": 155,
+		"./my.js": 155,
+		"./nb": 156,
+		"./nb.js": 156,
+		"./ne": 157,
+		"./ne.js": 157,
+		"./nl": 158,
+		"./nl-be": 159,
+		"./nl-be.js": 159,
+		"./nl.js": 158,
+		"./nn": 160,
+		"./nn.js": 160,
+		"./pa-in": 161,
+		"./pa-in.js": 161,
+		"./pl": 162,
+		"./pl.js": 162,
+		"./pt": 163,
+		"./pt-br": 164,
+		"./pt-br.js": 164,
+		"./pt.js": 163,
+		"./ro": 165,
+		"./ro.js": 165,
+		"./ru": 166,
+		"./ru.js": 166,
+		"./se": 167,
+		"./se.js": 167,
+		"./si": 168,
+		"./si.js": 168,
+		"./sk": 169,
+		"./sk.js": 169,
+		"./sl": 170,
+		"./sl.js": 170,
+		"./sq": 171,
+		"./sq.js": 171,
+		"./sr": 172,
+		"./sr-cyrl": 173,
+		"./sr-cyrl.js": 173,
+		"./sr.js": 172,
+		"./ss": 174,
+		"./ss.js": 174,
+		"./sv": 175,
+		"./sv.js": 175,
+		"./sw": 176,
+		"./sw.js": 176,
+		"./ta": 177,
+		"./ta.js": 177,
+		"./te": 178,
+		"./te.js": 178,
+		"./tet": 179,
+		"./tet.js": 179,
+		"./th": 180,
+		"./th.js": 180,
+		"./tl-ph": 181,
+		"./tl-ph.js": 181,
+		"./tlh": 182,
+		"./tlh.js": 182,
+		"./tr": 183,
+		"./tr.js": 183,
+		"./tzl": 184,
+		"./tzl.js": 184,
+		"./tzm": 185,
+		"./tzm-latn": 186,
+		"./tzm-latn.js": 186,
+		"./tzm.js": 185,
+		"./uk": 187,
+		"./uk.js": 187,
+		"./uz": 188,
+		"./uz.js": 188,
+		"./vi": 189,
+		"./vi.js": 189,
+		"./x-pseudo": 190,
+		"./x-pseudo.js": 190,
+		"./yo": 191,
+		"./yo.js": 191,
+		"./zh-cn": 192,
+		"./zh-cn.js": 192,
+		"./zh-hk": 193,
+		"./zh-hk.js": 193,
+		"./zh-tw": 194,
+		"./zh-tw.js": 194
 	};
 	function webpackContext(req) {
 		return __webpack_require__(webpackContextResolve(req));
@@ -57056,11 +57140,11 @@
 	};
 	webpackContext.resolve = webpackContextResolve;
 	module.exports = webpackContext;
-	webpackContext.id = 83;
+	webpackContext.id = 86;
 
 
 /***/ },
-/* 84 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57068,7 +57152,7 @@
 	//! author : Werner Mollentze : https://github.com/wernerm
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -57138,7 +57222,7 @@
 
 
 /***/ },
-/* 85 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57148,7 +57232,7 @@
 	//! author : forabi https://github.com/forabi
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -57285,7 +57369,7 @@
 
 
 /***/ },
-/* 86 */
+/* 89 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57293,7 +57377,7 @@
 	//! author : Noureddine LOUAHEDJ : https://github.com/noureddineme
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -57349,7 +57433,7 @@
 
 
 /***/ },
-/* 87 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57357,7 +57441,7 @@
 	//! author : Ali Hmer: https://github.com/kikoanis
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -57480,7 +57564,7 @@
 
 
 /***/ },
-/* 88 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57489,7 +57573,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -57545,7 +57629,7 @@
 
 
 /***/ },
-/* 89 */
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57553,7 +57637,7 @@
 	//! author : Suhail Alkowaileet : https://github.com/xsoh
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -57655,7 +57739,7 @@
 
 
 /***/ },
-/* 90 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57663,7 +57747,7 @@
 	//! author : Nader Toukabri : https://github.com/naderio
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -57719,7 +57803,7 @@
 
 
 /***/ },
-/* 91 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57727,7 +57811,7 @@
 	//! author : topchiyev : https://github.com/topchiyev
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -57829,7 +57913,7 @@
 
 
 /***/ },
-/* 92 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57839,7 +57923,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -57968,7 +58052,7 @@
 
 
 /***/ },
-/* 93 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -57976,7 +58060,7 @@
 	//! author : Krasen Borisov : https://github.com/kraz
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -58063,7 +58147,7 @@
 
 
 /***/ },
-/* 94 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -58071,7 +58155,7 @@
 	//! author : Kaushik Gandhi : https://github.com/kaushikgandhi
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -58187,7 +58271,7 @@
 
 
 /***/ },
-/* 95 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -58195,7 +58279,7 @@
 	//! author : Thupten N. Chakrishar : https://github.com/vajradog
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -58311,7 +58395,7 @@
 
 
 /***/ },
-/* 96 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -58319,7 +58403,7 @@
 	//! author : Jean-Baptiste Le Duigou : https://github.com/jbleduigou
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -58424,7 +58508,7 @@
 
 
 /***/ },
-/* 97 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -58433,7 +58517,7 @@
 	//! based on (hr) translation by Bojan Marković
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -58572,7 +58656,7 @@
 
 
 /***/ },
-/* 98 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -58580,7 +58664,7 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -58658,7 +58742,7 @@
 
 
 /***/ },
-/* 99 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -58666,7 +58750,7 @@
 	//! author : petrbela : https://github.com/petrbela
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -58835,7 +58919,7 @@
 
 
 /***/ },
-/* 100 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -58843,7 +58927,7 @@
 	//! author : Anatoly Mironov : https://github.com/mirontoli
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -58903,7 +58987,7 @@
 
 
 /***/ },
-/* 101 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -58912,7 +58996,7 @@
 	//! author : https://github.com/ryangreaves
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -58989,7 +59073,7 @@
 
 
 /***/ },
-/* 102 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -58997,7 +59081,7 @@
 	//! author : Ulrik Nielsen : https://github.com/mrbase
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59054,7 +59138,7 @@
 
 
 /***/ },
-/* 103 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59064,7 +59148,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59137,7 +59221,7 @@
 
 
 /***/ },
-/* 104 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59148,7 +59232,7 @@
 	//! author : Mikolaj Dadela : https://github.com/mik01aj
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59221,7 +59305,7 @@
 
 
 /***/ },
-/* 105 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59229,7 +59313,7 @@
 	//! author : Jawish Hameed : https://github.com/jawish
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59326,7 +59410,7 @@
 
 
 /***/ },
-/* 106 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59334,7 +59418,7 @@
 	//! author : Aggelos Karalias : https://github.com/mehiel
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59429,7 +59513,7 @@
 
 
 /***/ },
-/* 107 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59437,7 +59521,7 @@
 	//! author : Jared Morse : https://github.com/jarcoal
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59501,7 +59585,7 @@
 
 
 /***/ },
-/* 108 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59509,7 +59593,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59569,7 +59653,7 @@
 
 
 /***/ },
-/* 109 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59577,7 +59661,7 @@
 	//! author : Chris Gedrim : https://github.com/chrisgedrim
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59641,7 +59725,7 @@
 
 
 /***/ },
-/* 110 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59649,7 +59733,7 @@
 	//! author : Chris Cartlidge : https://github.com/chriscartlidge
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59713,7 +59797,7 @@
 
 
 /***/ },
-/* 111 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59721,7 +59805,7 @@
 	//! author : Luke McGregor : https://github.com/lukemcgregor
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59785,7 +59869,7 @@
 
 
 /***/ },
-/* 112 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59795,7 +59879,7 @@
 	//!          Se ne, bonvolu korekti kaj avizi min por ke mi povas lerni!
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59863,7 +59947,7 @@
 
 
 /***/ },
-/* 113 */
+/* 116 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -59871,7 +59955,7 @@
 	//! author : Julio Napurí : https://github.com/julionc
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -59949,14 +60033,14 @@
 
 
 /***/ },
-/* 114 */
+/* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
 	//! locale : Spanish (Dominican Republic) [es-do]
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60034,7 +60118,7 @@
 
 
 /***/ },
-/* 115 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60043,7 +60127,7 @@
 	//! improvements : Illimar Tambek : https://github.com/ragulka
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60119,7 +60203,7 @@
 
 
 /***/ },
-/* 116 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60127,7 +60211,7 @@
 	//! author : Eneko Illarramendi : https://github.com/eillarra
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60190,7 +60274,7 @@
 
 
 /***/ },
-/* 117 */
+/* 120 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60198,7 +60282,7 @@
 	//! author : Ebrahim Byagowi : https://github.com/ebraminio
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60302,7 +60386,7 @@
 
 
 /***/ },
-/* 118 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60310,7 +60394,7 @@
 	//! author : Tarmo Aidantausta : https://github.com/bleadof
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60414,7 +60498,7 @@
 
 
 /***/ },
-/* 119 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60422,7 +60506,7 @@
 	//! author : Ragnar Johannesen : https://github.com/ragnar123
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60479,7 +60563,7 @@
 
 
 /***/ },
-/* 120 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60487,7 +60571,7 @@
 	//! author : John Fischer : https://github.com/jfroffice
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60548,7 +60632,7 @@
 
 
 /***/ },
-/* 121 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60556,7 +60640,7 @@
 	//! author : Jonathan Abourbih : https://github.com/jonbca
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60613,7 +60697,7 @@
 
 
 /***/ },
-/* 122 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60621,7 +60705,7 @@
 	//! author : Gaspard Bucher : https://github.com/gaspard
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60682,7 +60766,7 @@
 
 
 /***/ },
-/* 123 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60690,7 +60774,7 @@
 	//! author : Robin van der Vliet : https://github.com/robin0van0der0v
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60760,7 +60844,7 @@
 
 
 /***/ },
-/* 124 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60768,7 +60852,7 @@
 	//! author : Jon Ashdown : https://github.com/jonashdown
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60841,7 +60925,7 @@
 
 
 /***/ },
-/* 125 */
+/* 128 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60849,7 +60933,7 @@
 	//! author : Juan G. Hurtado : https://github.com/juanghurtado
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -60923,7 +61007,7 @@
 
 
 /***/ },
-/* 126 */
+/* 129 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -60933,7 +61017,7 @@
 	//! author : Tal Ater : https://github.com/TalAter
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61027,7 +61111,7 @@
 
 
 /***/ },
-/* 127 */
+/* 130 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61035,7 +61119,7 @@
 	//! author : Mayank Singhal : https://github.com/mayanksinghal
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61156,7 +61240,7 @@
 
 
 /***/ },
-/* 128 */
+/* 131 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61164,7 +61248,7 @@
 	//! author : Bojan Marković : https://github.com/bmarkovic
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61306,7 +61390,7 @@
 
 
 /***/ },
-/* 129 */
+/* 132 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61314,7 +61398,7 @@
 	//! author : Adam Brunner : https://github.com/adambrunner
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61420,7 +61504,7 @@
 
 
 /***/ },
-/* 130 */
+/* 133 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61428,7 +61512,7 @@
 	//! author : Armendarabyan : https://github.com/armendarabyan
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61520,7 +61604,7 @@
 
 
 /***/ },
-/* 131 */
+/* 134 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61529,7 +61613,7 @@
 	//! reference: http://id.wikisource.org/wiki/Pedoman_Umum_Ejaan_Bahasa_Indonesia_yang_Disempurnakan
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61608,7 +61692,7 @@
 
 
 /***/ },
-/* 132 */
+/* 135 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61616,7 +61700,7 @@
 	//! author : Hinrik Örn Sigurðsson : https://github.com/hinrik
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61740,7 +61824,7 @@
 
 
 /***/ },
-/* 133 */
+/* 136 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61749,7 +61833,7 @@
 	//! author: Mattia Larentis: https://github.com/nostalgiaz
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61815,7 +61899,7 @@
 
 
 /***/ },
-/* 134 */
+/* 137 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61823,7 +61907,7 @@
 	//! author : LI Long : https://github.com/baryon
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61896,7 +61980,7 @@
 
 
 /***/ },
-/* 135 */
+/* 138 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61905,7 +61989,7 @@
 	//! reference: http://jv.wikipedia.org/wiki/Basa_Jawa
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -61984,7 +62068,7 @@
 
 
 /***/ },
-/* 136 */
+/* 139 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -61992,7 +62076,7 @@
 	//! author : Irakli Janiashvili : https://github.com/irakli-janiashvili
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62078,7 +62162,7 @@
 
 
 /***/ },
-/* 137 */
+/* 140 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62086,7 +62170,7 @@
 	//! authors : Nurlan Rakhimzhanov : https://github.com/nurlan
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62170,7 +62254,7 @@
 
 
 /***/ },
-/* 138 */
+/* 141 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62178,7 +62262,7 @@
 	//! author : Kruy Vanna : https://github.com/kruyvanna
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62233,7 +62317,7 @@
 
 
 /***/ },
-/* 139 */
+/* 142 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62242,7 +62326,7 @@
 	//! author : Jeeeyul Lee <jeeeyul@gmail.com>
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62303,7 +62387,7 @@
 
 
 /***/ },
-/* 140 */
+/* 143 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62311,7 +62395,7 @@
 	//! author : Chyngyz Arystan uulu : https://github.com/chyngyz
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62396,7 +62480,7 @@
 
 
 /***/ },
-/* 141 */
+/* 144 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62405,7 +62489,7 @@
 	//! author : David Raison : https://github.com/kwisatz
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62538,7 +62622,7 @@
 
 
 /***/ },
-/* 142 */
+/* 145 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62546,7 +62630,7 @@
 	//! author : Ryan Hart : https://github.com/ryanhart2
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62613,7 +62697,7 @@
 
 
 /***/ },
-/* 143 */
+/* 146 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62621,7 +62705,7 @@
 	//! author : Mindaugas Mozūras : https://github.com/mmozuras
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62735,7 +62819,7 @@
 
 
 /***/ },
-/* 144 */
+/* 147 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62744,7 +62828,7 @@
 	//! author : Jānis Elmeris : https://github.com/JanisE
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62837,7 +62921,7 @@
 
 
 /***/ },
-/* 145 */
+/* 148 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62845,7 +62929,7 @@
 	//! author : Miodrag Nikač <miodrag@restartit.me> : https://github.com/miodragnikac
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -62953,7 +63037,7 @@
 
 
 /***/ },
-/* 146 */
+/* 149 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -62961,7 +63045,7 @@
 	//! author : John Corrigan <robbiecloset@gmail.com> : https://github.com/johnideal
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63022,7 +63106,7 @@
 
 
 /***/ },
-/* 147 */
+/* 150 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63030,7 +63114,7 @@
 	//! author : Borislav Mickov : https://github.com/B0k0
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63117,7 +63201,7 @@
 
 
 /***/ },
-/* 148 */
+/* 151 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63125,7 +63209,7 @@
 	//! author : Floyd Pink : https://github.com/floydpink
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63203,7 +63287,7 @@
 
 
 /***/ },
-/* 149 */
+/* 152 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63212,7 +63296,7 @@
 	//! author : Vivek Athalye : https://github.com/vnathalye
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63367,7 +63451,7 @@
 
 
 /***/ },
-/* 150 */
+/* 153 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63375,7 +63459,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63454,7 +63538,7 @@
 
 
 /***/ },
-/* 151 */
+/* 154 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63463,7 +63547,7 @@
 	//! author : Weldan Jamili : https://github.com/weldan
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63542,7 +63626,7 @@
 
 
 /***/ },
-/* 152 */
+/* 155 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63552,7 +63636,7 @@
 	//! author : Tin Aung Lin : https://github.com/thanyawzinmin
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63643,7 +63727,7 @@
 
 
 /***/ },
-/* 153 */
+/* 156 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63652,7 +63736,7 @@
 	//!           Sigurd Gartmann : https://github.com/sigurdga
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63711,7 +63795,7 @@
 
 
 /***/ },
-/* 154 */
+/* 157 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63719,7 +63803,7 @@
 	//! author : suvash : https://github.com/suvash
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63839,7 +63923,7 @@
 
 
 /***/ },
-/* 155 */
+/* 158 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63848,7 +63932,7 @@
 	//! author : Jacob Middag : https://github.com/middagj
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -63930,7 +64014,7 @@
 
 
 /***/ },
-/* 156 */
+/* 159 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -63939,7 +64023,7 @@
 	//! author : Jacob Middag : https://github.com/middagj
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64021,7 +64105,7 @@
 
 
 /***/ },
-/* 157 */
+/* 160 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64029,7 +64113,7 @@
 	//! author : https://github.com/mechuwind
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64086,7 +64170,7 @@
 
 
 /***/ },
-/* 158 */
+/* 161 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64094,7 +64178,7 @@
 	//! author : Harpreet Singh : https://github.com/harpreetkhalsagtbit
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64215,7 +64299,7 @@
 
 
 /***/ },
-/* 159 */
+/* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64223,7 +64307,7 @@
 	//! author : Rafal Hirsz : https://github.com/evoL
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64325,7 +64409,7 @@
 
 
 /***/ },
-/* 160 */
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64333,7 +64417,7 @@
 	//! author : Jefferson : https://github.com/jalex79
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64395,7 +64479,7 @@
 
 
 /***/ },
-/* 161 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64403,7 +64487,7 @@
 	//! author : Caio Ribeiro Pereira : https://github.com/caio-ribeiro-pereira
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64461,7 +64545,7 @@
 
 
 /***/ },
-/* 162 */
+/* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64470,7 +64554,7 @@
 	//! author : Valentin Agachi : https://github.com/avaly
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64541,7 +64625,7 @@
 
 
 /***/ },
-/* 163 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64551,7 +64635,7 @@
 	//! author : Коренберг Марк : https://github.com/socketpair
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64729,7 +64813,7 @@
 
 
 /***/ },
-/* 164 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64737,7 +64821,7 @@
 	//! authors : Bård Rolstad Henriksen : https://github.com/karamell
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64795,7 +64879,7 @@
 
 
 /***/ },
-/* 165 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64803,7 +64887,7 @@
 	//! author : Sampath Sitinamaluwa : https://github.com/sampathsris
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -64871,7 +64955,7 @@
 
 
 /***/ },
-/* 166 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -64880,7 +64964,7 @@
 	//! based on work of petrbela : https://github.com/petrbela
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65026,7 +65110,7 @@
 
 
 /***/ },
-/* 167 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65034,7 +65118,7 @@
 	//! author : Robert Sedovšek : https://github.com/sedovsek
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65193,7 +65277,7 @@
 
 
 /***/ },
-/* 168 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65203,7 +65287,7 @@
 	//! author : Oerd Cukalla : https://github.com/oerd
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65268,7 +65352,7 @@
 
 
 /***/ },
-/* 169 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65276,7 +65360,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65383,7 +65467,7 @@
 
 
 /***/ },
-/* 170 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65391,7 +65475,7 @@
 	//! author : Milan Janačković<milanjanackovic@gmail.com> : https://github.com/milan-j
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65498,7 +65582,7 @@
 
 
 /***/ },
-/* 171 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65506,7 +65590,7 @@
 	//! author : Nicolai Davies<mail@nicolai.io> : https://github.com/nicolaidavies
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65592,7 +65676,7 @@
 
 
 /***/ },
-/* 172 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65600,7 +65684,7 @@
 	//! author : Jens Alm : https://github.com/ulmus
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65666,7 +65750,7 @@
 
 
 /***/ },
-/* 173 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65674,7 +65758,7 @@
 	//! author : Fahad Kassim : https://github.com/fadsel
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65730,7 +65814,7 @@
 
 
 /***/ },
-/* 174 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65738,7 +65822,7 @@
 	//! author : Arjunkumar Krishnamoorthy : https://github.com/tk120404
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65865,7 +65949,7 @@
 
 
 /***/ },
-/* 175 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65873,7 +65957,7 @@
 	//! author : Krishna Chaitanya Thota : https://github.com/kcthota
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -65959,7 +66043,7 @@
 
 
 /***/ },
-/* 176 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -65968,7 +66052,7 @@
 	//! author : Onorio De J. Afonso : https://github.com/marobo
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66032,7 +66116,7 @@
 
 
 /***/ },
-/* 177 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66040,7 +66124,7 @@
 	//! author : Kridsada Thanabulpong : https://github.com/sirn
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66104,7 +66188,7 @@
 
 
 /***/ },
-/* 178 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66112,7 +66196,7 @@
 	//! author : Dan Hagman : https://github.com/hagmandan
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66171,7 +66255,7 @@
 
 
 /***/ },
-/* 179 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66179,7 +66263,7 @@
 	//! author : Dominika Kruk : https://github.com/amaranthrose
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66296,7 +66380,7 @@
 
 
 /***/ },
-/* 180 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66305,7 +66389,7 @@
 	//!           Burak Yiğit Kaya: https://github.com/BYK
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66391,7 +66475,7 @@
 
 
 /***/ },
-/* 181 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66400,7 +66484,7 @@
 	//! author : Iustì Canun
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66487,7 +66571,7 @@
 
 
 /***/ },
-/* 182 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66495,7 +66579,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66550,7 +66634,7 @@
 
 
 /***/ },
-/* 183 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66558,7 +66642,7 @@
 	//! author : Abdel Said : https://github.com/abdelsaid
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66613,7 +66697,7 @@
 
 
 /***/ },
-/* 184 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66622,7 +66706,7 @@
 	//! Author : Menelion Elensúle : https://github.com/Oire
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66764,7 +66848,7 @@
 
 
 /***/ },
-/* 185 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66772,7 +66856,7 @@
 	//! author : Sardor Muminov : https://github.com/muminoff
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66827,7 +66911,7 @@
 
 
 /***/ },
-/* 186 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66835,7 +66919,7 @@
 	//! author : Bang Nguyen : https://github.com/bangnk
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66911,7 +66995,7 @@
 
 
 /***/ },
-/* 187 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66919,7 +67003,7 @@
 	//! author : Andrew Hood : https://github.com/andrewhood125
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -66984,7 +67068,7 @@
 
 
 /***/ },
-/* 188 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -66992,7 +67076,7 @@
 	//! author : Atolagbe Abisoye : https://github.com/andela-batolagbe
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -67049,7 +67133,7 @@
 
 
 /***/ },
-/* 189 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -67058,7 +67142,7 @@
 	//! author : Zeno Zeng : https://github.com/zenozeng
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -67181,7 +67265,7 @@
 
 
 /***/ },
-/* 190 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -67191,7 +67275,7 @@
 	//! author : Konstantin : https://github.com/skfd
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -67291,7 +67375,7 @@
 
 
 /***/ },
-/* 191 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//! moment.js locale configuration
@@ -67300,7 +67384,7 @@
 	//! author : Chris Lam : https://github.com/hehachris
 	
 	;(function (global, factory) {
-	    true ? factory(__webpack_require__(81)) :
+	    true ? factory(__webpack_require__(84)) :
 	   typeof define === 'function' && define.amd ? define(['../moment'], factory) :
 	   factory(global.moment)
 	}(this, (function (moment) { 'use strict';
@@ -67400,7 +67484,7 @@
 
 
 /***/ },
-/* 192 */
+/* 195 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -67956,7 +68040,7 @@
 
 
 /***/ },
-/* 193 */
+/* 196 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -68084,7 +68168,7 @@
 
 
 /***/ },
-/* 194 */
+/* 197 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -68393,7 +68477,7 @@
 
 
 /***/ },
-/* 195 */
+/* 198 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -68736,7 +68820,7 @@
 
 
 /***/ },
-/* 196 */
+/* 199 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -68957,7 +69041,7 @@
 
 
 /***/ },
-/* 197 */
+/* 200 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69144,7 +69228,7 @@
 
 
 /***/ },
-/* 198 */
+/* 201 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69161,7 +69245,7 @@
 
 
 /***/ },
-/* 199 */
+/* 202 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69177,7 +69261,7 @@
 
 
 /***/ },
-/* 200 */
+/* 203 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69194,7 +69278,7 @@
 
 
 /***/ },
-/* 201 */
+/* 204 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69211,7 +69295,7 @@
 
 
 /***/ },
-/* 202 */
+/* 205 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69228,7 +69312,7 @@
 
 
 /***/ },
-/* 203 */
+/* 206 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69245,7 +69329,7 @@
 
 
 /***/ },
-/* 204 */
+/* 207 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69298,7 +69382,7 @@
 
 
 /***/ },
-/* 205 */
+/* 208 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69330,7 +69414,7 @@
 	}
 
 /***/ },
-/* 206 */
+/* 209 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69375,7 +69459,7 @@
 	}
 
 /***/ },
-/* 207 */
+/* 210 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69403,7 +69487,7 @@
 	}
 
 /***/ },
-/* 208 */
+/* 211 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69485,7 +69569,7 @@
 	}
 
 /***/ },
-/* 209 */
+/* 212 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -69517,6 +69601,24 @@
 	    });
 	  }
 	
+	  function isValidPasswordResetRequest(token) {
+	    return $http.get(apiUrl + '/auth/reset/' + token).then(function (result) {
+	      return result.data;
+	    });
+	  }
+	
+	  function resetPassword(credentials) {
+	    return $http.post(apiUrl + '/auth/updatePassword', credentials).then(function (result) {
+	      return result.data;
+	    });
+	  }
+	
+	  function requestPasswordReset(email) {
+	    return $http.post(apiUrl + '/auth/forgot', email).then(function (result) {
+	      return result.data;
+	    });
+	  }
+	
 	  function credential(endpoint) {
 	    return function (credentials) {
 	      return $http.post(apiUrl + '/auth/' + endpoint, credentials).then(function (result) {
@@ -69543,38 +69645,41 @@
 	    signin: credential('signin'),
 	    signup: credential('signup'),
 	    getMe: getMe,
-	    getAll: getAll
+	    getAll: getAll,
+	    isValidPasswordResetRequest: isValidPasswordResetRequest,
+	    resetPassword: resetPassword,
+	    requestPasswordReset: requestPasswordReset
 	  };
 	}
 
 /***/ },
-/* 210 */
+/* 213 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Should already be required, here for clarity
 	__webpack_require__(1);
 	
 	// Load Angular and dependent libs
-	__webpack_require__(211);
-	__webpack_require__(213);
+	__webpack_require__(214);
+	__webpack_require__(216);
 	
 	// Now load Angular Material
-	__webpack_require__(215);
+	__webpack_require__(218);
 	
 	// Export namespace
 	module.exports = 'ngMaterial';
 
 
 /***/ },
-/* 211 */
+/* 214 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(212);
+	__webpack_require__(215);
 	module.exports = 'ngAnimate';
 
 
 /***/ },
-/* 212 */
+/* 215 */
 /***/ function(module, exports) {
 
 	/**
@@ -73732,15 +73837,15 @@
 
 
 /***/ },
-/* 213 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(214);
+	__webpack_require__(217);
 	module.exports = 'ngAria';
 
 
 /***/ },
-/* 214 */
+/* 217 */
 /***/ function(module, exports) {
 
 	/**
@@ -74153,7 +74258,7 @@
 
 
 /***/ },
-/* 215 */
+/* 218 */
 /***/ function(module, exports) {
 
 	/*!
@@ -107108,15 +107213,15 @@
 	})(window, window.angular);;window.ngMaterial={version:{full: "1.1.1"}};
 
 /***/ },
-/* 216 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(217);
+	__webpack_require__(220);
 	module.exports = 'ngMessages';
 
 
 /***/ },
-/* 217 */
+/* 220 */
 /***/ function(module, exports) {
 
 	/**
@@ -107863,14 +107968,14 @@
 
 
 /***/ },
-/* 218 */
+/* 221 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 219 */,
-/* 220 */
+/* 222 */,
+/* 223 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -108079,7 +108184,7 @@
 	//# sourceMappingURL=stateEvents.js.map
 
 /***/ },
-/* 221 */
+/* 224 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -108115,6 +108220,7 @@
 	  $stateProvider.state({
 	    name: 'newTrip',
 	    url: '/newTrip',
+	    data: { public: false },
 	    params: {
 	      airports: null
 	    },
@@ -108142,6 +108248,7 @@
 	  $stateProvider.state({
 	    name: 'tripLegs',
 	    url: '/tripLegs',
+	    data: { public: false },
 	    params: {
 	      totalTrip: null,
 	      airMiles: null
@@ -108164,6 +108271,7 @@
 	  $stateProvider.state({
 	    name: 'dashboard',
 	    url: '/dashboard',
+	    data: { public: false },
 	    params: {
 	      newTrip: null
 	    },
@@ -108210,7 +108318,7 @@
 	  $stateProvider.state({
 	    name: 'admin',
 	    url: '/admin',
-	    data: { admin: true },
+	    data: { admin: true, public: false },
 	    resolve: {
 	      trips: ['tripService', function (trip) {
 	        return trip.getAllTrips();
@@ -108235,6 +108343,7 @@
 	  $stateProvider.state({
 	    name: 'admin.tripDetail',
 	    url: '/tripDetail/:id',
+	    data: { public: false },
 	    resolve: {
 	      tripDetails: ['tripService', '$transition$', function (trip, transition) {
 	        return trip.getOneTrip(transition.params().id);
@@ -108243,11 +108352,27 @@
 	    component: 'adminDetail'
 	  });
 	
+	  $stateProvider.state({
+	    name: 'reset',
+	    url: '/reset/:token',
+	    data: { public: true },
+	    resolve: {
+	      validRequest: ['userService', '$transition$', function (u, t) {
+	        return u.isValidPasswordResetRequest(t.params().token);
+	      }]
+	    },
+	    views: {
+	      main: {
+	        component: 'reset'
+	      }
+	    }
+	  });
+	
 	  $urlRouterProvider.otherwise('/');
 	}
 
 /***/ },
-/* 222 */
+/* 225 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -108268,36 +108393,38 @@
 	function auth($rootScope, userService, $mdDialog, $state) {
 	
 	  $rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
-	    // if (!(toState.data && toState.data.admin) && !userService.isAdmin()) {
 	
-	    //   event.preventDefault();
-	    //   return $state.go('welcome');
+	    if (!toState.data.public) {
+	      if (!userService.isAuthenticated()) {
+	        event.preventDefault();
+	        $mdDialog.show({
+	          parent: _angular2.default.element(document.body),
+	          template: '<user-auth success="success" cancel="cancel" password-reset-request-success="passwordResetRequestSuccess"></user-auth>',
+	          controller: ['$scope', function ($scope) {
+	            $scope.success = function () {
+	              $mdDialog.hide();
+	              console.log('toState: ', toState);
+	              return $state.go(toState.name, toParams);
+	            };
+	            $scope.passwordResetRequestSuccess = function () {
+	              $mdDialog.hide();
+	              return $state.go('welcome');
+	            };
 	
-	    // } else
-	
-	    if (!(toState.data && toState.data.public) && !userService.isAuthenticated()) {
-	      event.preventDefault();
-	      $mdDialog.show({
-	        parent: _angular2.default.element(document.body),
-	        template: '<user-auth success="success" cancel="cancel"></user-auth>',
-	        controller: ['$scope', function ($scope) {
-	          $scope.success = function () {
-	            $mdDialog.hide();
-	            return $state.go(toState.name, toParams);
-	          };
-	          $scope.cancel = function () {
-	            $mdDialog.hide();
-	          };
-	        }],
-	        clickOutsideToClose: true,
-	        escapeToClose: true
-	      });
+	            $scope.cancel = function () {
+	              $mdDialog.hide();
+	            };
+	          }],
+	          clickOutsideToClose: true,
+	          escapeToClose: true
+	        });
+	      }
 	    }
 	  });
 	};
 
 /***/ },
-/* 223 */
+/* 226 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -108340,7 +108467,7 @@
 	}
 
 /***/ },
-/* 224 */
+/* 227 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
